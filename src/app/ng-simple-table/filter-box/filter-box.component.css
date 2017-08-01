@@ -1,0 +1,12 @@
+.ng-st-clear-filter {
+    cursor: pointer;
+    opacity: .5;
+    /* For IE8 and earlier */
+    filter: alpha(opacity=50);
+}
+
+.ng-st-clear-filter:hover {
+    opacity: 1.0;
+    /* For IE8 and earlier */
+    filter: alpha(opacity=100);
+}

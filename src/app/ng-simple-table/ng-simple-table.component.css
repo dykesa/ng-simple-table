@@ -16,6 +16,17 @@ th.ng-st-col-head {
 
 table.ng-simple-table {
     border-color: #cdcdcd;
+    border-style: solid;
+    border-collapse: collapse;
+    border-width: 1px;
+}
+
+table.ng-simple-table thead,
+table.ng-simple-table thead.th {
+    border-color: #cdcdcd;
+    border-style: solid;
+    border-collapse: collapse;
+    border-width: 1px;
 }
 
 .ng-st-filter-row {

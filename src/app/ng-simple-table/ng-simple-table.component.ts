@@ -150,10 +150,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     }
   }
 
-  filterChange(event, colName: string) {
-    // Don't worry about shift keys
-    if (event.keyCode === 16) { return; }
-    const filterText = event.srcElement.value;
+  filterChange(filterText: string, colName: string) {
     let filterRegEx = new RegExp('.*?', 'gi');
     if (filterText !== '' && filterText !== null) {
       filterRegEx = new RegExp(filterText, 'gi');

@@ -15,20 +15,20 @@
         </thead>
         <tbody>
             <ng-container *ngIf="tableSettings.filterRow === true">
-                <tr class="ng-st-filter-row">
+                <!-- <tr class="ng-st-filter-row">
                     <ng-container *ngFor="let col of tableSettings.columns">
                         <td>
                             <input type="text" class="filter-textbox" placeholder="Filter..." (keyup)="filterChange($event,col.name);" (value)="filterValues[col.name]" /><i class="fa fa-close ng-st-clear-filter" (click)="clearFilter(col.name)"></i>
                         </td>
                     </ng-container>
-                </tr>
-                <!-- <tr class="ng-st-filter-test-row">
+                </tr> -->
+                <tr class="ng-st-filter-row">
                     <ng-container *ngFor="let col of tableSettings.columns">
                         <td>
-                            <app-filter-box></app-filter-box>
+                            <app-filter-box [colName]="col.name" [table]="this"></app-filter-box>
                         </td>
                     </ng-container>
-                </tr> -->
+                </tr>
             </ng-container>
             <ng-container *ngFor="let row of tableData; let odd = odd; let even = even;">
                 <tr *ngIf="row.ngSTRowId !== undefined && row.ngSTdisp === true" id="{{row.ngSTRowId}}" class="ng-st-row" [ngClass]="{ odd: odd, even: even }">
