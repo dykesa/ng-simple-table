@@ -20,7 +20,6 @@ export class ColumnSettings {
   order: number;
   sortable: any;
   sortSettings: SortInfo;
-  filterKey;
 }
 
 export class SortInfo {

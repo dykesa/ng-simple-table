@@ -88,7 +88,10 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         } else {
           tempCol.sortable = col.sortable;
         }
-        tempCol.filterKey = 'ngstf' + col.name;
+        // If filtering enabled, setup blank array
+        if (this.tableSettings.filterRow === true) {
+          this.filterValues[col.name] = null;
+        }
         tempCol.sortSettings = new SortInfo();
         tempCol.order = colCount;
         this.tableSettings.columns.push(tempCol);
@@ -165,6 +168,10 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         }
       }
     });
+  }
+
+  clearFilter(colName) {
+    console.log(colName + ' value: ' + this.filterValues[colName]);
   }
 
 }
