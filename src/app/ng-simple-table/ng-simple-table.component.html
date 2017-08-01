@@ -1,0 +1,54 @@
+<div *ngIf="renderReady === true" class="ng-simple-table-holder">
+    <table class="{{tableSettings.tableClass}}">
+        <thead class="ng-st-thead">
+            <tr class="ng-st-head-row">
+                <ng-container *ngFor="let col of tableSettings.columns">
+                    <th class="ng-st-col-head {{col.name}}" [ngClass]="{'sortable': col.sortable===true}" (click)="col.sortable && this.sortClick(col.name)">{{col.display}}
+                        <ng-container *ngIf="col.sortable === true">&nbsp;
+                            <ng-container *ngIf="col.sortSettings.sort === 'unsort'"><i class="fa fa-sort"></i></ng-container>
+                            <ng-container *ngIf="col.sortSettings.sort === 'asc'"><i class="fa fa-sort-asc"></i></ng-container>
+                            <ng-container *ngIf="col.sortSettings.sort === 'desc'"><i class="fa fa-sort-desc"></i></ng-container>
+                        </ng-container>
+                    </th>
+                </ng-container>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngIf="tableSettings.filterRow === true">
+                <tr class="ng-st-filter-row">
+                    <ng-container *ngFor="let col of tableSettings.columns">
+                        <td>
+                            <input type="text" class="filter-textbox" placeholder="Filter..." (keyup)="filterChange($event,col.name);" /><i class="fa fa-close ng-st-clear-filter" (click)="clearFilter(col.name)"></i>
+                        </td>
+                    </ng-container>
+                </tr>
+            </ng-container>
+            <ng-container *ngFor="let row of tableData; let odd = odd; let even = even;">
+                <tr *ngIf="row.ngSTRowId !== undefined && row.ngSTdisp === true" id="{{row.ngSTRowId}}" class="ng-st-row" [ngClass]="{ odd: odd, even: even }">
+                    <ng-container *ngFor="let col of tableSettings.columns">
+                        <td class="ng-st-cell" (click)="this.functionObject.testAlert('Test');">
+                            <ng-container *ngIf="col.type==='string'">
+                                {{row[col.name]}}
+                            </ng-container>
+                            <ng-container *ngIf="col.type==='checkbox'">
+
+                            </ng-container>
+                        </td>
+                    </ng-container>
+                </tr>
+                <tr *ngIf="row.ngSTRowId === undefined && row.ngSTdisp === true" class="ng-st-row" [ngClass]="{ odd: odd, even: even }">
+                    <ng-container *ngFor="let col of tableSettings.columns">
+                        <td class="ng-st-cell" (click)="this.functionObject.testAlert('Test');">
+                            <ng-container *ngIf="col.type==='string'">
+                                {{row[col.name]}}
+                            </ng-container>
+                            <ng-container *ngIf="col.type==='checkbox'">
+
+                            </ng-container>
+                        </td>
+                    </ng-container>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,36 @@
+.ng-st-col-head.sortable {
+    cursor: pointer;
+}
+
+th.ng-st-col-head {
+    background-color: #99bfe6;
+}
+
+.even {
+    background-color: white;
+}
+
+.odd {
+    background-color: #ebf2fa;
+}
+
+table.ng-simple-table {
+    border-color: #cdcdcd;
+}
+
+.ng-st-filter-row {
+    background-color: #eeeeee;
+}
+
+.ng-st-clear-filter {
+    cursor: pointer;
+    opacity: .5;
+    filter: alpha(opacity=50);
+    /* For IE8 and earlier */
+}
+
+.ng-st-clear-filter:hover {
+    opacity: 1.0;
+    filter: alpha(opacity=100);
+    /* For IE8 and earlier */
+}
