@@ -151,24 +151,39 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   }
 
   filterChange(filterText: string, colName: string) {
-    let filterRegEx = new RegExp('.*?', 'gi');
-    if (filterText !== '' && filterText !== null) {
-      filterRegEx = new RegExp(filterText, 'gi');
-    }
+    // First capture the filter
+    this.filterValues[colName] = filterText;
+    let filterRegEx: RegExp;
     this.tableData.forEach( row => {
-      const colVal: string = row[colName];
-      if (colVal !== undefined && colVal !== null) {
-        if (colVal.match(filterRegEx) !== null) {
-          row.ngSTdisp = true;
-        } else {
-          row.ngSTdisp = false;
-        }
-      }
+      row.ngSTdisp = true;
     });
+    // On any key in the filterValues, filter the appropriate column for that value
+    for (let key in this.filterValues) {
+      if (this.filterValues[key] !== '' && this.filterValues[key] !== null) {
+        filterRegEx = new RegExp(this.filterValues[key], 'gi');
+        this.tableData.forEach(row => {
+          let keyType = this.tableSettings.columns.find(cs => cs.name === key).type;
+          if (keyType === 'string') {
+            if (row[key].match(filterRegEx) === null) { row.ngSTdisp = false; }
+          } else if (keyType === 'checkbox') {
+            if (row[key].display.match(filterRegEx) === null) { row.ngSTdisp = false; }
+          }
+        });
+      }
+    }
   }
 
   clearFilter(colName) {
     console.log(colName + ' value: ' + this.filterValues[colName]);
+  }
+
+  textChange(event, rowNum: number, colName: string) {
+    // Don't worry about shift keys
+    if (event.keyCode === 16) { return; }
+    // Grab the element so late it can be cleared
+    const textArea = event.srcElement;
+    const textValue = event.srcElement.value;
+    this.tableData[rowNum][colName] = textValue;
   }
 
 }

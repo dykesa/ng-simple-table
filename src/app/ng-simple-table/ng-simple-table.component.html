@@ -30,15 +30,18 @@
                     </ng-container>
                 </tr>
             </ng-container>
-            <ng-container *ngFor="let row of tableData; let odd = odd; let even = even;">
+            <ng-container *ngFor="let row of tableData; let i = index; let odd = odd; let even = even;">
                 <tr *ngIf="row.ngSTRowId !== undefined && row.ngSTdisp === true" id="{{row.ngSTRowId}}" class="ng-st-row" [ngClass]="{ odd: odd, even: even }">
                     <ng-container *ngFor="let col of tableSettings.columns">
                         <td class="ng-st-cell" (click)="this.functionObject.testAlert('Test');">
-                            <ng-container *ngIf="col.type==='string'">
+                            <ng-container *ngIf="col.type==='string' && col.edit === false">
                                 {{row[col.name]}}
                             </ng-container>
+                            <ng-container *ngIf="col.type==='string' && col.edit === true">
+                                <textarea class="ngst-edit-data" (keyup)="textChange($event, i, col.name);">{{tableData[i][col.name]}}</textarea>
+                            </ng-container>
                             <ng-container *ngIf="col.type==='checkbox'">
-
+                                <input type="checkbox" [checked]="row[col.name].checked" [disabled]="!col.edit" />&nbsp;{{row[col.name].display}}
                             </ng-container>
                         </td>
                     </ng-container>
@@ -46,11 +49,14 @@
                 <tr *ngIf="row.ngSTRowId === undefined && row.ngSTdisp === true" class="ng-st-row" [ngClass]="{ odd: odd, even: even }">
                     <ng-container *ngFor="let col of tableSettings.columns">
                         <td class="ng-st-cell" (click)="this.functionObject.testAlert('Test');">
-                            <ng-container *ngIf="col.type==='string'">
+                            <ng-container *ngIf="col.type==='string' && col.edit === false">
                                 {{row[col.name]}}
                             </ng-container>
+                            <ng-container *ngIf="col.type==='string' && col.edit === true">
+                                <textarea class="ngst-edit-data" (keyup)="textChange($event, i, col.name);">{{tableData[i][col.name]}}</textarea>
+                            </ng-container>
                             <ng-container *ngIf="col.type==='checkbox'">
-
+                                <input type="checkbox" [checked]="row[col.name].checked" [disabled]="!col.edit" />&nbsp;{{row[col.name].display}}
                             </ng-container>
                         </td>
                     </ng-container>

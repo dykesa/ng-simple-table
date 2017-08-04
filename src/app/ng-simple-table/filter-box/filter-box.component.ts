@@ -39,7 +39,6 @@ export class FilterBoxComponent implements OnInit {
   }
 
   emitChanges() {
-    console.log(new FilterData(this.colName, this.filterValue));
     this.table.filterChange(this.filterValue, this.colName);
   }
 
