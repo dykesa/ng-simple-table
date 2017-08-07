@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
-import { TableSettings, ColumnSettings, SortInfo } from './lib/table-settings';
-
-import { FilterBoxComponent } from './filter-box/filter-box.component';
+import { TableSettings, ColumnSettings, SortInfo, Dropdown, DrpdwnOption } from './lib/table-settings';
 
 @Component({
   selector: 'app-ng-simple-table',
@@ -13,7 +11,6 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
 
   @Input() settings: any;
   @Input() data: any;
-  @Input() functionObject: any;
   tableSettings: TableSettings;
   tableData: any[];
   tsLoaded = false;
@@ -59,6 +56,8 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     this.settings.columns.forEach(col => {
       // column must have a name
       if (col.name !== undefined) {
+        // Add a blank filter to that column
+        this.filterValues[col.name] = null;
         colCount++;
         let tempCol = new ColumnSettings();
         tempCol.name = col.name;
@@ -67,11 +66,24 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         } else {
           tempCol.display = col.display;
         }
-        // Options are "string" or "checkbox"
-        if (col.type === undefined || col.type !== 'checkbox') {
+        // Options are "string" (default), "checkbox", or "dropdown"
+        if (col.type === undefined && col.type !== 'checkbox' && col.type !== 'dropdown') {
           tempCol.type = 'string';
         } else {
           tempCol.type = col.type;
+          if (col.type === 'dropdown') {
+            let dropdown = new Dropdown;
+            dropdown.options = [];
+            col.dropdownOptions.default === undefined ?
+              dropdown.default = 'Select an option' : dropdown.default = col.dropdownOptions.default;
+            col.dropdownOptions.options.forEach(option => {
+              let drpOption = new DrpdwnOption;
+              drpOption.display = option.display;
+              drpOption.value = option.value;
+              dropdown.options.push(drpOption);
+            });
+            tempCol.dropdownOptions = dropdown;
+          }
         }
         if (col.edit === undefined || (col.edit !== false && col.edit !== true)) {
           tempCol.edit = false;
@@ -150,7 +162,15 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     }
   }
 
-  filterChange(filterText: string, colName: string) {
+  filterTypeCapture(event, colName: string) {
+    // Don't worry about shift keys
+    if (event.keyCode === 16) { return; }
+    // Grab the element so late it can be cleared
+    const filterText = event.srcElement.value;
+    this.filterChange(filterText, colName);
+  }
+
+  filterChange(filterText, colName: string) {
     // First capture the filter
     this.filterValues[colName] = filterText;
     let filterRegEx: RegExp;
@@ -174,7 +194,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   }
 
   clearFilter(colName) {
-    console.log(colName + ' value: ' + this.filterValues[colName]);
+    this.filterChange(null, colName);
   }
 
   textChange(event, rowNum: number, colName: string) {
@@ -184,6 +204,15 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     const textArea = event.srcElement;
     const textValue = event.srcElement.value;
     this.tableData[rowNum][colName] = textValue;
+  }
+
+  dropdownChange(event, rowNum, colName) {
+    const newValue = event.srcElement.value;
+    newValue === '' ? this.tableData[rowNum][colName] = undefined : this.tableData[rowNum][colName] = newValue;
+  }
+
+  tableDataDump() {
+    console.log(this.tableData);
   }
 
 }

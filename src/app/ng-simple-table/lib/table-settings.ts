@@ -20,6 +20,7 @@ export class ColumnSettings {
   order: number;
   sortable: any;
   sortSettings: SortInfo;
+  dropdownOptions?: Dropdown;
 }
 
 export class SortInfo {
@@ -29,4 +30,14 @@ export class SortInfo {
     // Options for this should be "unsort", "asc", "desc"
     this.sort = 'unsort';
   }
+}
+
+export class Dropdown {
+  default: string;
+  options: DrpdwnOption[];
+}
+
+export class DrpdwnOption {
+  display: string;
+  value: string;
 }

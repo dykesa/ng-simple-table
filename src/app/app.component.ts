@@ -30,6 +30,21 @@ export class AppComponent {
         type: 'checkbox',
         edit: false,
         sortable: true}
+        , {name: 'col4',
+        display: 'Dropdown Development',
+        type: 'dropdown',
+        edit: false,
+        sortable: true,
+        dropdownOptions: {
+            default: 'Pick something',
+            options: [{
+              display: 'Option 1',
+              value: 'secret-magic'
+            }, {
+              display: 'Go home',
+              value: 'opt2'
+            }]
+        }}
       ]
     };
 
@@ -41,6 +56,7 @@ export class AppComponent {
           checked: true
           , display: 'Test Checkbox Display'
         }
+        , col4: 'secret-magic'
       },
       {
         ngSTRowId: '1234'
@@ -50,6 +66,7 @@ export class AppComponent {
           checked: false
           , display: 'This should be unchecked'
         }
+        , col4: 'opt2'
       },
       {
         col1: '3rd Row'

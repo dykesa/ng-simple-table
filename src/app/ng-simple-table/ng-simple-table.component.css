@@ -36,14 +36,14 @@ table.ng-simple-table thead.th {
 .ng-st-clear-filter {
     cursor: pointer;
     opacity: .5;
-    filter: alpha(opacity=50);
     /* For IE8 and earlier */
+    filter: alpha(opacity=50);
 }
 
 .ng-st-clear-filter:hover {
     opacity: 1.0;
-    filter: alpha(opacity=100);
     /* For IE8 and earlier */
+    filter: alpha(opacity=100);
 }
 
 

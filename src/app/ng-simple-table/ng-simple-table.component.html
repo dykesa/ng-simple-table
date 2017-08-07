@@ -1,3 +1,6 @@
+<button (click)="tableDataDump()">Press Me</button>
+<br />
+<br />
 <div *ngIf="renderReady === true" class="ng-simple-table-holder">
     <table class="{{tableSettings.tableClass}}">
         <thead class="ng-st-thead">
@@ -25,7 +28,10 @@
                 <tr class="ng-st-filter-row">
                     <ng-container *ngFor="let col of tableSettings.columns">
                         <td>
-                            <app-filter-box [colName]="col.name" [table]="this"></app-filter-box>
+                            <!-- <app-filter-box [colName]="col.name" [table]="this"></app-filter-box> -->
+                            <div class="filter-container">
+                                <input type="text" class="filter-textbox" placeholder="Filter..." [value]="filterValues[col.name]" (keyup)="filterTypeCapture($event, col.name);" id="filter-box" /><i class="fa fa-close ng-st-clear-filter" (click)="clearFilter(col.name);"></i>
+                            </div>
                         </td>
                     </ng-container>
                 </tr>
@@ -33,7 +39,7 @@
             <ng-container *ngFor="let row of tableData; let i = index; let odd = odd; let even = even;">
                 <tr *ngIf="row.ngSTRowId !== undefined && row.ngSTdisp === true" id="{{row.ngSTRowId}}" class="ng-st-row" [ngClass]="{ odd: odd, even: even }">
                     <ng-container *ngFor="let col of tableSettings.columns">
-                        <td class="ng-st-cell" (click)="this.functionObject.testAlert('Test');">
+                        <td class="ng-st-cell">
                             <ng-container *ngIf="col.type==='string' && col.edit === false">
                                 {{row[col.name]}}
                             </ng-container>
@@ -42,13 +48,20 @@
                             </ng-container>
                             <ng-container *ngIf="col.type==='checkbox'">
                                 <input type="checkbox" [checked]="row[col.name].checked" [disabled]="!col.edit" />&nbsp;{{row[col.name].display}}
+                            </ng-container>
+                            <ng-container *ngIf="col.type==='dropdown'">
+                                <select (change)="dropdownChange($event,i,col.name)">
+                                  <option value="" [disabled]="!col.edit" [selected]="row[col.name] === undefined">{{col.dropdownOptions.default}}</option>
+                                  <option *ngFor='let option of col.dropdownOptions.options' [disabled]="!col.edit" [value]="option.value" [selected]="option.value === row[col.name]">{{option.display}}</option>
+                                </select>
                             </ng-container>
                         </td>
                     </ng-container>
                 </tr>
                 <tr *ngIf="row.ngSTRowId === undefined && row.ngSTdisp === true" class="ng-st-row" [ngClass]="{ odd: odd, even: even }">
                     <ng-container *ngFor="let col of tableSettings.columns">
-                        <td class="ng-st-cell" (click)="this.functionObject.testAlert('Test');">
+                        <td class="ng-st-cell">
+                            <!-- <td class="ng-st-cell" (click)="this.functionObject.testAlert('Test');"> -->
                             <ng-container *ngIf="col.type==='string' && col.edit === false">
                                 {{row[col.name]}}
                             </ng-container>
@@ -57,6 +70,12 @@
                             </ng-container>
                             <ng-container *ngIf="col.type==='checkbox'">
                                 <input type="checkbox" [checked]="row[col.name].checked" [disabled]="!col.edit" />&nbsp;{{row[col.name].display}}
+                            </ng-container>
+                            <ng-container *ngIf="col.type==='dropdown'">
+                                <select (change)="dropdownChange($event,i,col.name)">
+                                  <option value="" [disabled]="!col.edit" [selected]="row[col.name] === undefined">{{col.dropdownOptions.default}}</option>
+                                  <option *ngFor='let option of col.dropdownOptions.options' [disabled]="!col.edit" [value]="option.value" [selected]="option.value === row[col.name]">{{option.display}}</option>
+                                </select>
                             </ng-container>
                         </td>
                     </ng-container>
