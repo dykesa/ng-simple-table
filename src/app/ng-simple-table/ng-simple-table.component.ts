@@ -158,7 +158,13 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
       //      after a user starts modifying dropdowns and comments, etc. ) Should probably modify this later
       sortMDArrayByColumn(this.tableData, 'ngSToso', 'asc');
     } else {
-      sortMDArrayByColumn(this.tableData, colName, newSort);
+      const colType = this.tableSettings.columns.find(col => col.name === colName).type;
+      if (colType === 'checkbox') {
+        sortMDArrayByColumn(this.tableData, colName, newSort, 'checked');
+      } else {
+        // For String/the default
+        sortMDArrayByColumn(this.tableData, colName, newSort);
+      }
     }
   }
 
@@ -221,7 +227,7 @@ function typeOf (obj) {
   return {}.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase();
 }
 
-function sortMDArrayByColumn(ary, sortColumn, direction) {
+function sortMDArrayByColumn(ary, sortColumn, direction, subColumn?) {
     // Taken from https://stackoverflow.com/a/40389265 and modified
 
     // Adds a sequential number to each row of the array
@@ -229,21 +235,39 @@ function sortMDArrayByColumn(ary, sortColumn, direction) {
     for (let x = 0; x < ary.length; x++) {ary[x].index = x; }
     if (direction === 'asc') {
       ary.sort(function(a, b){
+        if (subColumn === undefined) {
           if (a[sortColumn] > b[sortColumn]) {return 1; }
           if (a[sortColumn] < b[sortColumn]) {return -1; }
           if (a.index > b.index) {
               return 1;
           }
           return -1;
+        } else {
+          if (a[sortColumn][subColumn] > b[sortColumn][subColumn]) {return 1; }
+          if (a[sortColumn][subColumn] < b[sortColumn][subColumn]) {return -1; }
+          if (a.index > b.index) {
+              return 1;
+          }
+          return -1;
+        }
       });
     } else if (direction === 'desc') {
       ary.sort(function(a, b){
+        if (subColumn === undefined) {
           if (a[sortColumn] < b[sortColumn]) {return 1; }
           if (a[sortColumn] > b[sortColumn]) {return -1; }
           if (a.index > b.index) {
               return 1;
           }
           return -1;
+        } else {
+          if (a[sortColumn][subColumn] < b[sortColumn][subColumn]) {return 1; }
+          if (a[sortColumn][subColumn] > b[sortColumn][subColumn]) {return -1; }
+          if (a.index > b.index) {
+              return 1;
+          }
+          return -1;
+        }
       });
     }
 }
