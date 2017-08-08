@@ -28,7 +28,7 @@ export class AppComponent {
         , {name: 'col3',
         display: 'Checkbox Test',
         type: 'checkbox',
-        edit: false,
+        edit: true,
         sortable: true}
         , {name: 'col4',
         display: 'Dropdown Development',

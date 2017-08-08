@@ -212,6 +212,11 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     this.tableData[rowNum][colName] = textValue;
   }
 
+  checkboxChange(event, rowNum: number, colName: string) {
+    const newValue = event.srcElement.checked;
+    this.tableData[rowNum][colName].checked = newValue;
+  }
+
   dropdownChange(event, rowNum, colName) {
     const newValue = event.srcElement.value;
     newValue === '' ? this.tableData[rowNum][colName] = undefined : this.tableData[rowNum][colName] = newValue;
