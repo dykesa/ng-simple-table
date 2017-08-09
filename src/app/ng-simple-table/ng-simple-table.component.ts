@@ -100,6 +100,9 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         } else {
           tempCol.sortable = col.sortable;
         }
+        if (col.width !== undefined) {
+          tempCol.width = col.width;
+        }
         // If filtering enabled, setup blank array
         if (this.tableSettings.filterRow === true) {
           this.filterValues[col.name] = null;

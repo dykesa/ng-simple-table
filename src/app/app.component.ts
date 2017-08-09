@@ -19,7 +19,8 @@ export class AppComponent {
         {name: 'col1',
         display: 'Column 1',
         type: 'string',
-        edit: true}
+        edit: true,
+        width: 100}
         , {name: 'col2',
         display: 'Column 2 Test',
         type: 'string',

@@ -21,6 +21,7 @@ export class ColumnSettings {
   sortable: any;
   sortSettings: SortInfo;
   dropdownOptions?: Dropdown;
+  width: number;
 }
 
 export class SortInfo {

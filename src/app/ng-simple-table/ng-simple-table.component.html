@@ -3,7 +3,7 @@
         <thead class="ng-st-thead">
             <tr class="ng-st-head-row">
                 <ng-container *ngFor="let col of tableSettings.columns">
-                    <th class="ng-st-col-head {{col.name}}" [ngClass]="{'sortable': col.sortable===true}" (click)="col.sortable && this.sortClick(col.name)">{{col.display}}
+                    <th class="ng-st-col-head {{col.name}}" [style.width.px]="col.width" [ngClass]="{'sortable': col.sortable===true}" (click)="col.sortable && this.sortClick(col.name)">{{col.display}}
                         <ng-container *ngIf="col.sortable === true">&nbsp;
                             <ng-container *ngIf="col.sortSettings.sort === 'unsort'"><i class="fa fa-sort"></i></ng-container>
                             <ng-container *ngIf="col.sortSettings.sort === 'asc'"><i class="fa fa-sort-asc"></i></ng-container>
@@ -15,17 +15,9 @@
         </thead>
         <tbody>
             <ng-container *ngIf="tableSettings.filterRow === true">
-                <!-- <tr class="ng-st-filter-row">
-                    <ng-container *ngFor="let col of tableSettings.columns">
-                        <td>
-                            <input type="text" class="filter-textbox" placeholder="Filter..." (keyup)="filterChange($event,col.name);" (value)="filterValues[col.name]" /><i class="fa fa-close ng-st-clear-filter" (click)="clearFilter(col.name)"></i>
-                        </td>
-                    </ng-container>
-                </tr> -->
                 <tr class="ng-st-filter-row">
                     <ng-container *ngFor="let col of tableSettings.columns">
                         <td>
-                            <!-- <app-filter-box [colName]="col.name" [table]="this"></app-filter-box> -->
                             <div class="filter-container">
                                 <input type="text" class="filter-textbox" placeholder="Filter..." [value]="filterValues[col.name]" (keyup)="filterTypeCapture($event, col.name);" id="filter-box" /><i class="fa fa-close ng-st-clear-filter" (click)="clearFilter(col.name);"></i>
                             </div>
