@@ -20,22 +20,25 @@ export class AppComponent {
         display: 'Column 1',
         type: 'string',
         edit: true,
-        width: 100}
+        maxWidth: 100}
         , {name: 'col2',
         display: 'Column 2 Test',
         type: 'string',
         edit: false,
-        sortable: false}
+        sortable: false,
+        maxWidth: 100}
         , {name: 'col3',
         display: 'Checkbox Test',
         type: 'checkbox',
         edit: true,
-        sortable: true}
+        sortable: true,
+        maxWidth: 100}
         , {name: 'col4',
         display: 'Dropdown Development',
         type: 'dropdown',
         edit: false,
         sortable: true,
+        maxWidth: 100,
         dropdownOptions: {
             default: 'Pick something',
             options: [{

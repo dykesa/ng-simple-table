@@ -38,7 +38,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   }
 
   checkRenderReady() {
-    if (this.tsLoaded === true && this.tdLoaded === true) {this.renderReady = true; console.log('Ready to render'); }
+    if (this.tsLoaded === true && this.tdLoaded === true) {this.renderReady = true; }
   }
 
   loadTableSettings() {
@@ -100,8 +100,8 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         } else {
           tempCol.sortable = col.sortable;
         }
-        if (col.width !== undefined) {
-          tempCol.width = col.width;
+        if (col.maxWidth !== undefined) {
+          tempCol.maxWidth = col.maxWidth;
         }
         // If filtering enabled, setup blank array
         if (this.tableSettings.filterRow === true) {
@@ -223,10 +223,6 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   dropdownChange(event, rowNum, colName) {
     const newValue = event.srcElement.value;
     newValue === '' ? this.tableData[rowNum][colName] = undefined : this.tableData[rowNum][colName] = newValue;
-  }
-
-  tableDataDump() {
-    console.log(this.tableData);
   }
 
 }
