@@ -1,5 +1,5 @@
 <div *ngIf="renderReady === true" class="ng-simple-table-holder">
-    <table class="{{tableSettings.tableClass}}">
+    <table [ngClass]="tableSettings.tableClass">
         <thead class="ng-st-thead">
             <tr class="ng-st-head-row">
                 <ng-container *ngFor="let col of tableSettings.columns">
@@ -36,6 +36,9 @@
                             <ng-container *ngIf="col.type==='string' && col.edit === true">
                                 <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="textChange($event, i, col.name);">{{tableData[i][col.name]}}</textarea>
                             </ng-container>
+                            <ng-container *ngIf="col.type==='html'">
+                                <div [innerHTML]="row[col.name]"></div>
+                            </ng-container>
                             <ng-container *ngIf="col.type==='checkbox'">
                                 <input type="checkbox" (change)="checkboxChange($event, i, col.name);" [checked]="row[col.name].checked" [disabled]="!col.edit" />&nbsp;{{row[col.name].display}}
                             </ng-container>
@@ -57,6 +60,9 @@
                             </ng-container>
                             <ng-container *ngIf="col.type==='string' && col.edit === true">
                                 <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="textChange($event, i, col.name);">{{tableData[i][col.name]}}</textarea>
+                            </ng-container>
+                            <ng-container *ngIf="col.type==='html'">
+                                <div [innerHTML]="row[col.name]"></div>
                             </ng-container>
                             <ng-container *ngIf="col.type==='checkbox'">
                                 <input type="checkbox" (change)="checkboxChange($event, i, col.name);" [checked]="row[col.name].checked" [disabled]="!col.edit" />&nbsp;{{row[col.name].display}}

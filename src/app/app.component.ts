@@ -49,6 +49,12 @@ export class AppComponent {
               value: 'opt2'
             }]
         }}
+        , {name: 'htmlTest',
+        display: 'HTML Test',
+        type: 'html',
+        edit: false,
+        sortable: true,
+        maxWidth: 150}
       ]
     };
 
@@ -61,6 +67,7 @@ export class AppComponent {
           , display: 'Test Checkbox Display'
         }
         , col4: 'secret-magic'
+        , htmlTest: '<strong>Test</strong>'
       },
       {
         ngSTRowId: '1234'
@@ -71,6 +78,7 @@ export class AppComponent {
           , display: 'This should be unchecked'
         }
         , col4: 'opt2'
+        , htmlTest: '<strong>Test</strong>'
       },
       {
         col1: '3rd Row'
@@ -79,6 +87,7 @@ export class AppComponent {
           checked: false
           , display: 'This should be unchecked'
         }
+        , htmlTest: '<strong>Test</strong>'
       },
       {
         col1: 'Testing 4th Row'
@@ -87,6 +96,7 @@ export class AppComponent {
           checked: false
           , display: 'This should be unchecked'
         }
+        , htmlTest: '<strong>Test</strong>'
       },
       {
         col1: 'Row 5'
@@ -111,6 +121,7 @@ export class AppComponent {
           checked: false
           , display: 'This should be unchecked'
         }
+        , htmlTest: '<strong>Test</strong>'
       },
       {
         col1: 'Row 8'

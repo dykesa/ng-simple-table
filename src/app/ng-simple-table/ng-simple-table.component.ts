@@ -67,7 +67,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
           tempCol.display = col.display;
         }
         // Options are "string" (default), "checkbox", or "dropdown"
-        if (col.type === undefined && col.type !== 'checkbox' && col.type !== 'dropdown') {
+        if (col.type === undefined && col.type !== 'checkbox' && col.type !== 'dropdown' && col.type !== 'html') {
           tempCol.type = 'string';
         } else {
           tempCol.type = col.type;
