@@ -49,10 +49,3 @@ th.ng-st-col-head {
     /* For IE8 and earlier */
     filter: alpha(opacity=100);
 }
-
-
-/* Make the text areas a little shorter, user can expand them if they want */
-
-textarea.ngst-edit-data {
-    height: 1.25em;
-}

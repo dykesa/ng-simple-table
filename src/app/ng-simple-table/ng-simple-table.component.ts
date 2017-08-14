@@ -100,8 +100,13 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         } else {
           tempCol.sortable = col.sortable;
         }
-        if (col.maxWidth !== undefined) {
-          tempCol.maxWidth = col.maxWidth;
+        if (col.maxWidth !== undefined || col.type === 'html') {
+          // for html types, table gets a little funky if there is no maxwidth
+          if (col.type === 'html' && col.maxwidth === undefined) {
+            tempCol.maxWidth = 200;
+          } else {
+            tempCol.maxWidth = col.maxWidth;
+          }
         }
         // If filtering enabled, setup blank array
         if (this.tableSettings.filterRow === true) {
