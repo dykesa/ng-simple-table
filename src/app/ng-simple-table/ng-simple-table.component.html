@@ -29,7 +29,7 @@
             <ng-container *ngFor="let row of tableData; let i = index; let odd = odd; let even = even;">
                 <tr *ngIf="row.ngSTRowId !== undefined && row.ngSTdisp === true" id="{{row.ngSTRowId}}" class="ng-st-row" [ngClass]="{ odd: odd, even: even }">
                     <ng-container *ngFor="let col of tableSettings.columns">
-                        <td class="ng-st-cell" [style.max-width.px]="col.maxWidth">
+                        <td class="ng-st-cell {{col.name}}" [style.max-width.px]="col.maxWidth">
                             <ng-container *ngIf="col.type==='string' && col.edit === false">
                                 {{row[col.name]}}
                             </ng-container>
@@ -53,7 +53,7 @@
                 </tr>
                 <tr *ngIf="row.ngSTRowId === undefined && row.ngSTdisp === true" class="ng-st-row" [ngClass]="{ odd: odd, even: even }">
                     <ng-container *ngFor="let col of tableSettings.columns">
-                        <td class="ng-st-cell" [style.max-width.px]="col.maxWidth">
+                        <td class="ng-st-cell {{col.name}}" [style.max-width.px]="col.maxWidth">
                             <!-- <td class="ng-st-cell" (click)="this.functionObject.testAlert('Test');"> -->
                             <ng-container *ngIf="col.type==='string' && col.edit === false">
                                 {{row[col.name]}}
