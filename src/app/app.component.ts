@@ -15,6 +15,7 @@ export class AppComponent {
   constructor() {
     this.exampleTableSettings = {
       tableClass: 'table-class-example'
+      , bottomEditAllRow: true
       , columns: [
         {name: 'col1',
         display: 'Column 1',
@@ -36,7 +37,7 @@ export class AppComponent {
         , {name: 'col4',
         display: 'Dropdown Development',
         type: 'dropdown',
-        edit: false,
+        edit: true,
         sortable: true,
         maxWidth: 100,
         dropdownOptions: {

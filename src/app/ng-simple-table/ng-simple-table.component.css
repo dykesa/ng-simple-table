@@ -21,6 +21,15 @@ table.ng-simple-table {
     border-width: 1px;
 }
 
+table,
+tr,
+th,
+td {
+    border: 1px solid #cdcdcd;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
 table.ng-simple-table thead tr,
 table.ng-simple-table thead tr th {
     border-color: #cdcdcd;

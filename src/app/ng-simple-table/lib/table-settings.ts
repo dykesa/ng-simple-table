@@ -2,6 +2,7 @@ export class TableSettings {
   displayHeaders: any;
   tableClass: string;
   filterRow: any;
+  bottomEditAllRow: any;
   columns: ColumnSettings[];
 
   constructor() {

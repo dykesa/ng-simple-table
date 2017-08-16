@@ -77,6 +77,24 @@
                     </ng-container>
                 </tr>
             </ng-container>
+            <tr *ngIf="tableSettings.bottomEditAllRow" class="bottomEditAllRow">
+                <ng-container *ngFor="let col of tableSettings.columns">
+                    <td>
+                        <ng-container *ngIf="col.type==='string' && col.edit">
+                            <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="textAllChangeCapture($event, col.name)"></textarea>
+                        </ng-container>
+                        <ng-container *ngIf="col.type==='checkbox' && col.edit">
+                            <input type="checkbox" (change)="chkAllChangeCapture($event, col.name)" />&nbsp;All
+                        </ng-container>
+                        <ng-container *ngIf="col.type==='dropdown' && col.edit">
+                            <select [style.max-width.px]="col.maxWidth*.9" (change)="drpAllChangeCapture($event, col.name)">
+                          <option value="">{{col.dropdownOptions.default}}</option>
+                          <option *ngFor='let option of col.dropdownOptions.options' [value]="option.value">{{option.display}}</option>
+                        </select>
+                        </ng-container>
+                    </td>
+                </ng-container>
+            </tr>
         </tbody>
     </table>
 </div>

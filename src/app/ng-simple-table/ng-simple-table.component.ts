@@ -9,7 +9,7 @@ import { TableSettings, ColumnSettings, SortInfo, Dropdown, DrpdwnOption } from 
 })
 export class NgSimpleTableComponent implements OnInit, OnChanges {
 
-  @Input() settings: any;
+  @Input() settings: TableSettings;
   @Input() data: any;
   tableSettings: TableSettings;
   tableData: any[];
@@ -51,6 +51,13 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     }
     if (this.settings.tableClass !== undefined && typeOf(this.settings.tableClass) === 'string') {
       this.tableSettings.tableClass = this.settings.tableClass;
+    }
+    if (this.settings.bottomEditAllRow === undefined ||
+        (this.settings.bottomEditAllRow !== false && this.settings.bottomEditAllRow !== true)) {
+      // Default is no bottom line
+      this.tableSettings.bottomEditAllRow = false;
+    } else {
+      this.tableSettings.bottomEditAllRow = this.settings.bottomEditAllRow;
     }
     let colCount = 0;
     this.settings.columns.forEach(col => {
@@ -102,7 +109,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         }
         if (col.maxWidth !== undefined || col.type === 'html') {
           // for html types, table gets a little funky if there is no maxwidth
-          if (col.type === 'html' && col.maxwidth === undefined) {
+          if (col.type === 'html' && col.maxWidth === undefined) {
             tempCol.maxWidth = 200;
           } else {
             tempCol.maxWidth = col.maxWidth;
@@ -228,6 +235,27 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   dropdownChange(event, rowNum, colName) {
     const newValue = event.srcElement.value;
     newValue === '' ? this.tableData[rowNum][colName] = undefined : this.tableData[rowNum][colName] = newValue;
+  }
+
+  textAllChangeCapture(event, colName: string) {
+    const newText = event.srcElement.value;
+    this.tableData.forEach(r => {
+      r[colName] = newText;
+    });
+  }
+
+  chkAllChangeCapture(event, colName: string) {
+    const newValue = event.srcElement.checked;
+    this.tableData.forEach(r => {
+      r[colName].checked = newValue;
+    });
+  }
+
+  drpAllChangeCapture(event, colName: string) {
+    const newValue = event.srcElement.value;
+    this.tableData.forEach(r => {
+      newValue === '' ? r[colName] = undefined : r[colName] = newValue;
+    });
   }
 
 }
