@@ -28,4 +28,8 @@ Before running the tests make sure you are serving the app via `ng serve`.
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 ## TO DO
-Add an "update all" row to the bottom.
+
+**2017-08-16**
+
+* Refactor table-settings.ts to setup default values in the class
+* Refactor ng-simple-table.component.ts to use only the settings passed in instead of rebuilding it all and storing it in another variable

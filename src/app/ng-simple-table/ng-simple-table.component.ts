@@ -17,10 +17,12 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   tdLoaded = false;
   renderReady = false;
   filterValues: string[];
+  timeoutHandles: any[];
 
   constructor() {
     this.tableSettings = new TableSettings();
     this.filterValues = [];
+    this.timeoutHandles = [];
    }
 
   ngOnInit() {
@@ -59,6 +61,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     } else {
       this.tableSettings.bottomEditAllRow = this.settings.bottomEditAllRow;
     }
+    if (this.settings.changeAllDelay !== undefined) { this.tableSettings.changeAllDelay = this.settings.changeAllDelay; }
     let colCount = 0;
     this.settings.columns.forEach(col => {
       // column must have a name
@@ -237,25 +240,32 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     newValue === '' ? this.tableData[rowNum][colName] = undefined : this.tableData[rowNum][colName] = newValue;
   }
 
-  textAllChangeCapture(event, colName: string) {
-    const newText = event.srcElement.value;
-    this.tableData.forEach(r => {
-      r[colName] = newText;
-    });
+  allChange(event, colName: string, type: string) {
+    // Catch a change, delay 500 milliseconds before activating the change,
+    //  or, if another change comes through before 500 milliseconds is up then delay again
+    let newValue;
+    if (type === 'text') {
+      newValue = event.srcElement.value;
+    } else if (type === 'chk') {
+      newValue = event.srcElement.checked;
+    } else if (type === 'drp') {
+      newValue = event.srcElement.value;
+    }
+    if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
+    this.timeoutHandles[colName] =
+      setTimeout(this.allChangeDelay.bind(null, this, colName, type, newValue), this.tableSettings.changeAllDelay);
   }
 
-  chkAllChangeCapture(event, colName: string) {
-    const newValue = event.srcElement.checked;
-    this.tableData.forEach(r => {
-      r[colName].checked = newValue;
-    });
-  }
-
-  drpAllChangeCapture(event, colName: string) {
-    const newValue = event.srcElement.value;
-    this.tableData.forEach(r => {
-      newValue === '' ? r[colName] = undefined : r[colName] = newValue;
-    });
+  allChangeDelay(objectIn, colName: string, type: string, newValue: string) {
+    // Once a user hasn't made another change for a column in 500 milliseconds,
+    //  write the change to the data table
+    if (type === 'text') {
+      objectIn.tableData.forEach(r => r[colName] = newValue);
+    } else if (type === 'chk') {
+      objectIn.tableData.forEach(r => r[colName].checked = newValue);
+    } else if (type === 'drp') {
+      objectIn.tableData.forEach(r => newValue === '' ? r[colName] = undefined : r[colName] = newValue);
+    }
   }
 
 }

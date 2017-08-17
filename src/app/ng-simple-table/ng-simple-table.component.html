@@ -81,13 +81,13 @@
                 <ng-container *ngFor="let col of tableSettings.columns">
                     <td>
                         <ng-container *ngIf="col.type==='string' && col.edit">
-                            <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="textAllChangeCapture($event, col.name)"></textarea>
+                            <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="allChange($event, col.name, 'text')"></textarea>
                         </ng-container>
                         <ng-container *ngIf="col.type==='checkbox' && col.edit">
-                            <input type="checkbox" (change)="chkAllChangeCapture($event, col.name)" />&nbsp;All
+                            <input type="checkbox" (change)="allChange($event, col.name, 'chk')" />&nbsp;All
                         </ng-container>
                         <ng-container *ngIf="col.type==='dropdown' && col.edit">
-                            <select [style.max-width.px]="col.maxWidth*.9" (change)="drpAllChangeCapture($event, col.name)">
+                            <select [style.max-width.px]="col.maxWidth*.9" (change)="allChange($event, col.name, 'drp')">
                           <option value="">{{col.dropdownOptions.default}}</option>
                           <option *ngFor='let option of col.dropdownOptions.options' [value]="option.value">{{option.display}}</option>
                         </select>

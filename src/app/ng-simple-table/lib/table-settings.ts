@@ -3,12 +3,14 @@ export class TableSettings {
   tableClass: string;
   filterRow: any;
   bottomEditAllRow: any;
+  changeAllDelay: number;
   columns: ColumnSettings[];
 
   constructor() {
     this.columns = [];
     this.tableClass = 'ng-simple-table';
     this.filterRow = true;
+    this.changeAllDelay = 0;
   }
 }
 

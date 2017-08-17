@@ -16,6 +16,7 @@ export class AppComponent {
     this.exampleTableSettings = {
       tableClass: 'table-class-example'
       , bottomEditAllRow: true
+      , changeAllDelay: 500
       , columns: [
         {name: 'col1',
         display: 'Column 1',
