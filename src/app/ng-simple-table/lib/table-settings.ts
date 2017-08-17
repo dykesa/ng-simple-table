@@ -4,13 +4,18 @@ export class TableSettings {
   filterRow: any;
   bottomEditAllRow: any;
   changeAllDelay: number;
+  emitDataChanges: any;
   columns: ColumnSettings[];
 
   constructor() {
     this.columns = [];
     this.tableClass = 'ng-simple-table';
+    // Default values
+    this.displayHeaders = true;
     this.filterRow = true;
+    this.bottomEditAllRow = false;
     this.changeAllDelay = 0;
+    this.emitDataChanges = false;
   }
 }
 

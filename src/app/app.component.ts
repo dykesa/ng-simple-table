@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { NgSimpleTableComponent } from './ng-simple-table/ng-simple-table.component';
+import { NgSimpleTableComponent, DataChangeRequest } from './ng-simple-table/ng-simple-table.component';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +11,14 @@ export class AppComponent {
   title = 'Simple Table Example';
   exampleTableSettings: any;
   exampleTableData: any;
+  dataChange: DataChangeRequest;
 
   constructor() {
     this.exampleTableSettings = {
       tableClass: 'table-class-example'
       , bottomEditAllRow: true
       , changeAllDelay: 500
+      , emitDataChanges: true
       , columns: [
         {name: 'col1',
         display: 'Column 1',
@@ -176,9 +178,9 @@ export class AppComponent {
     ];
   }
 
-  testAlert(displayText: string) {
-    console.log(displayText);
+  captureDataChange(event) {
+    this.dataChange = event;
+    console.log(this.dataChange);
   }
-
 
 }

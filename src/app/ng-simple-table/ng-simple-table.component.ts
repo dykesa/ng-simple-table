@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter  } from '@angular/core';
 
 import { TableSettings, ColumnSettings, SortInfo, Dropdown, DrpdwnOption } from './lib/table-settings';
 
@@ -11,6 +11,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
 
   @Input() settings: TableSettings;
   @Input() data: any;
+  @Output() dataChange: EventEmitter<any> = new EventEmitter();
   tableSettings: TableSettings;
   tableData: any[];
   tsLoaded = false;
@@ -45,23 +46,18 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
 
   loadTableSettings() {
     // Set defaults for some table settings if they weren't set by the user
-    if (this.settings.displayHeaders === undefined || (this.settings.displayHeaders !== false && this.settings.displayHeaders !== true)) {
-      // displayHeaders was undefined or some invalid value
-      this.tableSettings.displayHeaders = true;
-    } else {
+    if (this.settings.displayHeaders !== undefined && (this.settings.displayHeaders === false || this.settings.displayHeaders === true)) {
       this.tableSettings.displayHeaders = this.settings.displayHeaders;
     }
-    if (this.settings.tableClass !== undefined && typeOf(this.settings.tableClass) === 'string') {
+    if (this.settings.tableClass !== undefined) {
       this.tableSettings.tableClass = this.settings.tableClass;
     }
-    if (this.settings.bottomEditAllRow === undefined ||
-        (this.settings.bottomEditAllRow !== false && this.settings.bottomEditAllRow !== true)) {
-      // Default is no bottom line
-      this.tableSettings.bottomEditAllRow = false;
-    } else {
+    if (this.settings.bottomEditAllRow !== undefined &&
+        (this.settings.bottomEditAllRow === false || this.settings.bottomEditAllRow === true)) {
       this.tableSettings.bottomEditAllRow = this.settings.bottomEditAllRow;
     }
     if (this.settings.changeAllDelay !== undefined) { this.tableSettings.changeAllDelay = this.settings.changeAllDelay; }
+    if (this.settings.emitDataChanges !== undefined) { this.tableSettings.emitDataChanges = this.settings.emitDataChanges; }
     let colCount = 0;
     this.settings.columns.forEach(col => {
       // column must have a name
@@ -228,16 +224,29 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     const textArea = event.srcElement;
     const textValue = event.srcElement.value;
     this.tableData[rowNum][colName] = textValue;
+    if (this.tableSettings.emitDataChanges === true) {
+      this.emitDataChange(rowNum, colName, 'text', textValue);
+    }
   }
 
   checkboxChange(event, rowNum: number, colName: string) {
     const newValue = event.srcElement.checked;
+    // Call exception delete function here
     this.tableData[rowNum][colName].checked = newValue;
+    if (this.tableSettings.emitDataChanges === true) {
+      this.emitDataChange(rowNum, colName, 'chk', newValue);
+    }
   }
 
   dropdownChange(event, rowNum, colName) {
-    const newValue = event.srcElement.value;
-    newValue === '' ? this.tableData[rowNum][colName] = undefined : this.tableData[rowNum][colName] = newValue;
+    let newValue = event.srcElement.value;
+    if (newValue === '') {
+      newValue = undefined;
+    }
+    this.tableData[rowNum][colName] = newValue;
+    if (this.tableSettings.emitDataChanges === true) {
+      this.emitDataChange(rowNum, colName, 'drp', newValue);
+    }
   }
 
   allChange(event, colName: string, type: string) {
@@ -261,11 +270,26 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     //  write the change to the data table
     if (type === 'text') {
       objectIn.tableData.forEach(r => r[colName] = newValue);
+      if (objectIn.tableSettings.emitDataChanges === true) {
+        objectIn.emitDataChange(0, colName, 'allText', newValue);
+      }
     } else if (type === 'chk') {
       objectIn.tableData.forEach(r => r[colName].checked = newValue);
+      if (objectIn.tableSettings.emitDataChanges === true) {
+        objectIn.emitDataChange(0, colName, 'allChk', newValue);
+      }
     } else if (type === 'drp') {
-      objectIn.tableData.forEach(r => newValue === '' ? r[colName] = undefined : r[colName] = newValue);
+      objectIn.tableData.forEach(r => r[colName] = newValue);
+      if (objectIn.tableSettings.emitDataChanges === true) {
+        objectIn.emitDataChange(0, colName, 'allDrp', newValue);
+      }
     }
+  }
+
+  emitDataChange(rowNum: number, colName: string, type: string, newValue: string) {
+    // Create a data change request object and emit and event
+    const dataChange: DataChangeRequest = new DataChangeRequest(rowNum, colName, type, newValue);
+    this.dataChange.emit(dataChange);
   }
 
 }
@@ -317,4 +341,18 @@ function sortMDArrayByColumn(ary, sortColumn, direction, subColumn?) {
         }
       });
     }
+}
+
+export class DataChangeRequest {
+  RowNum: number;
+  ColName: string;
+  Type: string;
+  NewValue: any;
+
+  constructor(rowNum?: number, colName?: string, type?: string, newValue?: string) {
+    this.RowNum = rowNum;
+    this.ColName = colName;
+    this.Type = type;
+    this.NewValue = newValue;
+  }
 }
