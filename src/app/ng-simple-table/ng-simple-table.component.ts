@@ -207,10 +207,27 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
             if (row[key].match(filterRegEx) === null) { row.ngSTdisp = false; }
           } else if (keyType === 'checkbox') {
             if (row[key].display.match(filterRegEx) === null) { row.ngSTdisp = false; }
+          } else if (keyType === 'dropdown') {
+            const drpdwnOpts = this.dropdownOptionAssociation(colName);
+            const rowVal = row[key];
+            if (drpdwnOpts[rowVal] !== undefined && drpdwnOpts[rowVal].toString().match(filterRegEx) === null ) {
+              row.ngSTdisp = false;
+            } else if (drpdwnOpts[rowVal] === undefined) {
+              row.ngSTdisp = false;
+            }
           }
         });
       }
     }
+  }
+
+  dropdownOptionAssociation(dropdownColName: string) {
+    const drpdwnArray = [];
+    const drpCol = this.tableSettings.columns.find(c => c.name === dropdownColName);
+    if (drpCol !== undefined && drpCol.type === 'dropdown') {
+      drpCol.dropdownOptions.options.forEach(opt => drpdwnArray[opt.value] = opt.display);
+    }
+    return drpdwnArray;
   }
 
   clearFilter(colName) {
