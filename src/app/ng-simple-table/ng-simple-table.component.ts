@@ -221,12 +221,10 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     // Don't worry about shift keys
     if (event.keyCode === 16) { return; }
     // Grab the element so late it can be cleared
-    const textArea = event.srcElement;
-    const textValue = event.srcElement.value;
-    this.tableData[rowNum][colName] = textValue;
-    if (this.tableSettings.emitDataChanges === true) {
-      this.emitDataChange(rowNum, colName, 'text', textValue);
-    }
+    const newValue = event.srcElement.value;
+    if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
+    this.timeoutHandles[colName] =
+      setTimeout(this.changeDelay.bind(null, this, rowNum, colName, 'text', newValue), this.tableSettings.changeAllDelay);
   }
 
   checkboxChange(event, rowNum: number, colName: string) {
@@ -250,43 +248,49 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   }
 
   allChange(event, colName: string, type: string) {
-    // Catch a change, delay 500 milliseconds before activating the change,
-    //  or, if another change comes through before 500 milliseconds is up then delay again
     let newValue;
-    if (type === 'text') {
+    if (type === 'allText') {
+      // Catch a change, delay by the number o milliseconds defined in the tables settings before activating the change,
+      //  or, if another change comes through before the delay is up then delay again
       newValue = event.srcElement.value;
+      if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
+      this.timeoutHandles[colName] =
+        setTimeout(this.changeDelay.bind(null, this, 0, colName, type, newValue), this.tableSettings.changeAllDelay);
     } else if (type === 'chk') {
+      // Checkboxes
       newValue = event.srcElement.checked;
+      this.tableData.forEach(r => r[colName].checked = newValue);
+      if (this.tableSettings.emitDataChanges === true) {
+        this.emitDataChange(0, colName, 'allChk', newValue);
+      }
     } else if (type === 'drp') {
-      newValue = event.srcElement.value;
+      // Dropdowns
+      if (newValue === 'ngSTunset') {
+        newValue = '';
+      } else {
+        newValue = event.srcElement.value;
+      }
+      this.tableData.forEach(r => r[colName] = newValue);
+      if (this.tableSettings.emitDataChanges === true) {
+        this.emitDataChange(0, colName, 'allDrp', newValue);
+      }
       event.srcElement.value = '';
     }
-    if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
-    this.timeoutHandles[colName] =
-      setTimeout(this.allChangeDelay.bind(null, this, colName, type, newValue), this.tableSettings.changeAllDelay);
   }
 
-  allChangeDelay(objectIn, colName: string, type: string, newValue: string) {
+  changeDelay(objectIn, rowNum: number, colName: string, type: string, newValue: string) {
     // Once a user hasn't made another change for a column in 500 milliseconds,
     //  write the change to the data table
 
-    // Dropdown reset
-    if (type === 'drp' && newValue === 'ngSTunset') { newValue = ''; }
-
-    if (type === 'text') {
+    if (type === 'allText') {
       objectIn.tableData.forEach(r => r[colName] = newValue);
       if (objectIn.tableSettings.emitDataChanges === true) {
-        objectIn.emitDataChange(0, colName, 'allText', newValue);
+        objectIn.emitDataChange(rowNum, colName, 'allText', newValue);
       }
-    } else if (type === 'chk') {
-      objectIn.tableData.forEach(r => r[colName].checked = newValue);
+    } else if (type === 'text') {
+      objectIn.tableData[rowNum][colName] = newValue;
       if (objectIn.tableSettings.emitDataChanges === true) {
-        objectIn.emitDataChange(0, colName, 'allChk', newValue);
-      }
-    } else if (type === 'drp') {
-      objectIn.tableData.forEach(r => r[colName] = newValue);
-      if (objectIn.tableSettings.emitDataChanges === true) {
-        objectIn.emitDataChange(0, colName, 'allDrp', newValue);
+        objectIn.emitDataChange(rowNum, colName, 'text', newValue);
       }
     }
   }

@@ -81,7 +81,7 @@
                 <ng-container *ngFor="let col of tableSettings.columns">
                     <td>
                         <ng-container *ngIf="col.type==='string' && col.edit">
-                            <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="allChange($event, col.name, 'text')"></textarea>
+                            <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="allChange($event, col.name, 'allText')"></textarea>
                         </ng-container>
                         <ng-container *ngIf="col.type==='checkbox' && col.edit">
                             <input type="checkbox" (change)="allChange($event, col.name, 'chk')" />&nbsp;All
