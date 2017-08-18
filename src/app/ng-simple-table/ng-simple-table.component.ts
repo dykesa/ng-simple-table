@@ -259,6 +259,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
       newValue = event.srcElement.checked;
     } else if (type === 'drp') {
       newValue = event.srcElement.value;
+      event.srcElement.value = '';
     }
     if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
     this.timeoutHandles[colName] =
@@ -268,6 +269,10 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   allChangeDelay(objectIn, colName: string, type: string, newValue: string) {
     // Once a user hasn't made another change for a column in 500 milliseconds,
     //  write the change to the data table
+
+    // Dropdown reset
+    if (type === 'drp' && newValue === 'ngSTunset') { newValue = ''; }
+
     if (type === 'text') {
       objectIn.tableData.forEach(r => r[colName] = newValue);
       if (objectIn.tableSettings.emitDataChanges === true) {
