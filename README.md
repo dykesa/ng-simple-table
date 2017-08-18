@@ -29,7 +29,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## TO DO
 
-**2017-08-16**
+**2017-08-18**
 
-* Refactor table-settings.ts to setup default values in the class
-* Refactor ng-simple-table.component.ts to use only the settings passed in instead of rebuilding it all and storing it in another variable
+* Currently all features working as intended

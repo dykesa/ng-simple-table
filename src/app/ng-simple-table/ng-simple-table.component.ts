@@ -254,46 +254,58 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     if (event.keyCode === 16) { return; }
     // Grab the element so late it can be cleared
     const newValue = event.srcElement.value;
+    const rowArray: number[] = [];
     if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
     this.timeoutHandles[colName] =
-      setTimeout(this.changeDelay.bind(null, this, rowNum, colName, 'text', newValue), this.tableSettings.changeAllDelay);
+      rowArray.push(rowNum);
+      setTimeout(this.changeDelay.bind(null, this, rowArray, colName, 'text', newValue), this.tableSettings.changeAllDelay);
   }
 
   checkboxChange(event, rowNum: number, colName: string) {
     const newValue = event.srcElement.checked;
     // Call exception delete function here
     this.tableData[rowNum][colName].checked = newValue;
+    const rowArray: number[] = [];
     if (this.tableSettings.emitDataChanges === true) {
-      this.emitDataChange(rowNum, colName, 'chk', newValue);
+      rowArray.push(rowNum);
+      this.emitDataChange(rowArray, colName, 'chk', newValue);
     }
   }
 
   dropdownChange(event, rowNum, colName) {
     let newValue = event.srcElement.value;
+    const rowArray: number[] = [];
     if (newValue === '') {
       newValue = undefined;
     }
     this.tableData[rowNum][colName] = newValue;
     if (this.tableSettings.emitDataChanges === true) {
-      this.emitDataChange(rowNum, colName, 'drp', newValue);
+      rowArray.push(rowNum);
+      this.emitDataChange(rowArray, colName, 'drp', newValue);
     }
   }
 
   allChange(event, colName: string, type: string) {
     let newValue;
+    const rowArray: number[] = [];
     if (type === 'allText') {
-      // Catch a change, delay by the number o milliseconds defined in the tables settings before activating the change,
+      // Catch a change, delay by the number of milliseconds defined in the tables settings before activating the change,
       //  or, if another change comes through before the delay is up then delay again
+
+      // Actual rows aren't calculated until the delay is up so just passing in an array with a number 0
+      rowArray.push(0);
       newValue = event.srcElement.value;
       if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
       this.timeoutHandles[colName] =
-        setTimeout(this.changeDelay.bind(null, this, 0, colName, type, newValue), this.tableSettings.changeAllDelay);
+        setTimeout(this.changeDelay.bind(null, this, rowArray, colName, type, newValue), this.tableSettings.changeAllDelay);
     } else if (type === 'chk') {
       // Checkboxes
       newValue = event.srcElement.checked;
-      this.tableData.forEach(r => r[colName].checked = newValue);
+      this.tableData.forEach((r, rIndex) => {
+        if (r.ngSTdisp === true) { r[colName].checked = newValue; rowArray.push(rIndex); }
+      });
       if (this.tableSettings.emitDataChanges === true) {
-        this.emitDataChange(0, colName, 'allChk', newValue);
+        this.emitDataChange(rowArray, colName, 'allChk', newValue);
       }
     } else if (type === 'drp') {
       // Dropdowns
@@ -302,34 +314,40 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
       } else {
         newValue = event.srcElement.value;
       }
-      this.tableData.forEach(r => r[colName] = newValue);
+      this.tableData.forEach((r, rIndex) => {
+        if (r.ngSTdisp === true) { r[colName] = newValue; rowArray.push(rIndex); }
+      });
       if (this.tableSettings.emitDataChanges === true) {
-        this.emitDataChange(0, colName, 'allDrp', newValue);
+        this.emitDataChange(rowArray, colName, 'allDrp', newValue);
       }
       event.srcElement.value = '';
     }
   }
 
-  changeDelay(objectIn, rowNum: number, colName: string, type: string, newValue: string) {
+  changeDelay(objectIn, rowArray: number[], colName: string, type: string, newValue: string) {
     // Once a user hasn't made another change for a column in 500 milliseconds,
     //  write the change to the data table
 
     if (type === 'allText') {
-      objectIn.tableData.forEach(r => r[colName] = newValue);
+      rowArray = []
+;      objectIn.tableData.forEach((r, rIndex) => {
+        if (r.ngSTdisp === true) { r[colName] = newValue; rowArray.push(rIndex); }
+      });
       if (objectIn.tableSettings.emitDataChanges === true) {
-        objectIn.emitDataChange(rowNum, colName, 'allText', newValue);
+        objectIn.emitDataChange(rowArray, colName, 'text', newValue);
       }
     } else if (type === 'text') {
+      const rowNum = rowArray[0];
       objectIn.tableData[rowNum][colName] = newValue;
       if (objectIn.tableSettings.emitDataChanges === true) {
-        objectIn.emitDataChange(rowNum, colName, 'text', newValue);
+        objectIn.emitDataChange(rowArray, colName, 'text', newValue);
       }
     }
   }
 
-  emitDataChange(rowNum: number, colName: string, type: string, newValue: string) {
+  emitDataChange(rowArray: number[], colName: string, type: string, newValue: string) {
     // Create a data change request object and emit and event
-    const dataChange: DataChangeRequest = new DataChangeRequest(rowNum, colName, type, newValue);
+    const dataChange: DataChangeRequest = new DataChangeRequest(rowArray, colName, type, newValue);
     this.dataChange.emit(dataChange);
   }
 
@@ -385,13 +403,13 @@ function sortMDArrayByColumn(ary, sortColumn, direction, subColumn?) {
 }
 
 export class DataChangeRequest {
-  RowNum: number;
+  RowArray: number[];
   ColName: string;
   Type: string;
   NewValue: any;
 
-  constructor(rowNum?: number, colName?: string, type?: string, newValue?: string) {
-    this.RowNum = rowNum;
+  constructor(rowArray?: number[], colName?: string, type?: string, newValue?: string) {
+    this.RowArray = rowArray;
     this.ColName = colName;
     this.Type = type;
     this.NewValue = newValue;
