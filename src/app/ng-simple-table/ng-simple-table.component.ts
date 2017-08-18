@@ -146,6 +146,21 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     }
   }
 
+  startAllChkStatus(colName) {
+    // Basically if more than 50% of the checkboxes start checked, show the all as checked so it can be unchecked and vice versa
+    let chkAll = false;
+    // If there are no rows of data, just show a non-checked all
+    const rowCount = this.tableData.length;
+    if (rowCount === undefined) { return chkAll; }
+    let checkCount = 0;
+    this.tableData.forEach(r => {
+      if (r[colName].checked !== undefined && r[colName].checked === true) { checkCount++; }
+    });
+    if (checkCount === undefined) { return chkAll; }
+    if ((checkCount / rowCount) > .5) { chkAll = true; }
+    return chkAll;
+  }
+
   sortClick(colName: string) {
     // Cycle goes unsort/asc/desc
 
