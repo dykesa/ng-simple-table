@@ -4,10 +4,10 @@
             <tr class="ng-st-head-row">
                 <ng-container *ngFor="let col of tableSettings.columns">
                     <th class="ng-st-col-head {{col.name}}" [style.max-width.px]="col.maxWidth" [ngClass]="{'sortable': col.sortable===true}" (click)="col.sortable && this.sortClick(col.name)">{{col.display}}
-                        <ng-container *ngIf="col.sortable === true">&nbsp;
-                            <ng-container *ngIf="col.sortSettings.sort === 'unsort'"><i class="fa fa-sort"></i></ng-container>
-                            <ng-container *ngIf="col.sortSettings.sort === 'asc'"><i class="fa fa-sort-asc"></i></ng-container>
-                            <ng-container *ngIf="col.sortSettings.sort === 'desc'"><i class="fa fa-sort-desc"></i></ng-container>
+                        <ng-container *ngIf="col.sortable === true">
+                            <ng-container *ngIf="col.sortSettings.sort === 'unsort'"><i class="icon-sort"></i></ng-container>
+                            <ng-container *ngIf="col.sortSettings.sort === 'asc'"><i class="icon-sort-up"></i></ng-container>
+                            <ng-container *ngIf="col.sortSettings.sort === 'desc'"><i class="icon-sort-down"></i></ng-container>
                         </ng-container>
                     </th>
                 </ng-container>
@@ -19,8 +19,10 @@
                     <ng-container *ngFor="let col of tableSettings.columns">
                         <td [style.max-width.px]="col.maxWidth">
                             <div class="filter-container">
-                                <input type="text" [style.max-width.px]="(col.maxWidth-20)" class="filter-textbox" placeholder="Filter..." [value]="filterValues[col.name]" (keyup)="filterTypeCapture($event, col.name);" id="filter-box" /><i class="fa fa-close ng-st-clear-filter"
-                                    (click)="clearFilter(col.name);"></i>
+                                <input type="text" class="filter-textbox" [style.max-width.px]="(col.maxWidth-6)" placeholder="Filter..." [value]="filterValues[col.name]" (keyup)="filterTypeCapture($event, col.name);" />
+                                <div class="ng-st-clear-filter-container">
+                                    <i class="icon-cancel ng-st-clear-filter" (click)="clearFilter(col.name);"></i>
+                                </div>
                             </div>
                         </td>
                     </ng-container>
