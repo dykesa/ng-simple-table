@@ -5,7 +5,7 @@ import { TableSettings, ColumnSettings, SortInfo, Dropdown, DrpdwnOption } from 
 @Component({
   selector: 'app-ng-simple-table',
   templateUrl: './ng-simple-table.component.html',
-  styleUrls: ['./ng-simple-table.component.css', './lib/font-awesome-4.7.0/css/font-awesome.min.css']
+  styleUrls: ['./ng-simple-table.component.css', './lib/fontello/css/fontello.min.css']
 })
 export class NgSimpleTableComponent implements OnInit, OnChanges {
 
@@ -56,7 +56,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         (this.settings.bottomEditAllRow === false || this.settings.bottomEditAllRow === true)) {
       this.tableSettings.bottomEditAllRow = this.settings.bottomEditAllRow;
     }
-    if (this.settings.changeAllDelay !== undefined) { this.tableSettings.changeAllDelay = this.settings.changeAllDelay; }
+    if (this.settings.changeTextDelay !== undefined) { this.tableSettings.changeTextDelay = this.settings.changeTextDelay; }
     if (this.settings.emitDataChanges !== undefined) { this.tableSettings.emitDataChanges = this.settings.emitDataChanges; }
     let colCount = 0;
     this.settings.columns.forEach(col => {
@@ -201,7 +201,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     // Don't worry about shift keys
     if (event.keyCode === 16) { return; }
     // Grab the element so late it can be cleared
-    const filterText = event.srcElement.value;
+    const filterText = event.target.value;
     this.filterChange(filterText, colName);
   }
 
@@ -253,16 +253,16 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     // Don't worry about shift keys
     if (event.keyCode === 16) { return; }
     // Grab the element so late it can be cleared
-    const newValue = event.srcElement.value;
+    const newValue = event.target.value;
     const rowArray: number[] = [];
     if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
+    rowArray.push(rowNum);
     this.timeoutHandles[colName] =
-      rowArray.push(rowNum);
-      setTimeout(this.changeDelay.bind(null, this, rowArray, colName, 'text', newValue), this.tableSettings.changeAllDelay);
+      setTimeout(this.changeDelay.bind(null, this, rowArray, colName, 'text', newValue), this.tableSettings.changeTextDelay);
   }
 
   checkboxChange(event, rowNum: number, colName: string) {
-    const newValue = event.srcElement.checked;
+    const newValue = event.target.checked;
     // Call exception delete function here
     this.tableData[rowNum][colName].checked = newValue;
     const rowArray: number[] = [];
@@ -273,7 +273,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   }
 
   dropdownChange(event, rowNum, colName) {
-    let newValue = event.srcElement.value;
+    let newValue = event.target.value;
     const rowArray: number[] = [];
     if (newValue === '') {
       newValue = undefined;
@@ -294,33 +294,33 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
 
       // Actual rows aren't calculated until the delay is up so just passing in an array with a number 0
       rowArray.push(0);
-      newValue = event.srcElement.value;
+      newValue = event.target.value;
       if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
       this.timeoutHandles[colName] =
-        setTimeout(this.changeDelay.bind(null, this, rowArray, colName, type, newValue), this.tableSettings.changeAllDelay);
+        setTimeout(this.changeDelay.bind(null, this, rowArray, colName, 'allText', newValue), this.tableSettings.changeTextDelay);
     } else if (type === 'chk') {
       // Checkboxes
-      newValue = event.srcElement.checked;
+      newValue = event.target.checked;
       this.tableData.forEach((r, rIndex) => {
         if (r.ngSTdisp === true) { r[colName].checked = newValue; rowArray.push(rIndex); }
       });
       if (this.tableSettings.emitDataChanges === true) {
-        this.emitDataChange(rowArray, colName, 'allChk', newValue);
+        this.emitDataChange(rowArray, colName, 'chk', newValue);
       }
     } else if (type === 'drp') {
       // Dropdowns
       if (newValue === 'ngSTunset') {
         newValue = '';
       } else {
-        newValue = event.srcElement.value;
+        newValue = event.target.value;
       }
       this.tableData.forEach((r, rIndex) => {
         if (r.ngSTdisp === true) { r[colName] = newValue; rowArray.push(rIndex); }
       });
       if (this.tableSettings.emitDataChanges === true) {
-        this.emitDataChange(rowArray, colName, 'allDrp', newValue);
+        this.emitDataChange(rowArray, colName, 'drp', newValue);
       }
-      event.srcElement.value = '';
+      event.target.value = '';
     }
   }
 

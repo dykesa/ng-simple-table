@@ -3,7 +3,7 @@ export class TableSettings {
   tableClass: string;
   filterRow: any;
   bottomEditAllRow: any;
-  changeAllDelay: number;
+  changeTextDelay: number;
   emitDataChanges: any;
   columns: ColumnSettings[];
 
@@ -14,7 +14,7 @@ export class TableSettings {
     this.displayHeaders = true;
     this.filterRow = true;
     this.bottomEditAllRow = false;
-    this.changeAllDelay = 0;
+    this.changeTextDelay = 0;
     this.emitDataChanges = false;
   }
 }
