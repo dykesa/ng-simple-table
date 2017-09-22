@@ -13,7 +13,6 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   @Input() data: any;
   @Output() dataChange: EventEmitter<any> = new EventEmitter();
   tableSettings: TableSettings;
-  tableData: any[];
   tsLoaded = false;
   tdLoaded = false;
   renderReady = false;
@@ -131,7 +130,6 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
 
   loadTableData() {
     if (typeOf(this.data) === 'array') {
-      this.tableData = [];
       // Add original sort order number to data passed in
       let i = 0;
       this.data.forEach(rowIn => {
@@ -139,9 +137,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         rowIn.ngSToso = i;
         // Should a row be displayed
         rowIn.ngSTdisp = true;
-        this.tableData.push(rowIn);
       });
-      this.tableData = this.data;
       this.tdLoaded = true;
     }
   }
@@ -150,10 +146,10 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     // Basically if more than 50% of the checkboxes start checked, show the all as checked so it can be unchecked and vice versa
     let chkAll = false;
     // If there are no rows of data, just show a non-checked all
-    const rowCount = this.tableData.length;
+    const rowCount = this.data.length;
     if (rowCount === undefined) { return chkAll; }
     let checkCount = 0;
-    this.tableData.forEach(r => {
+    this.data.forEach(r => {
       if (r[colName].checked !== undefined && r[colName].checked === true) { checkCount++; }
     });
     if (checkCount === undefined) { return chkAll; }
@@ -185,14 +181,14 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     if (newSort === 'unsort') {
       // Just set the data equal to the original data pull (This may not always work...
       //      after a user starts modifying dropdowns and comments, etc. ) Should probably modify this later
-      sortMDArrayByColumn(this.tableData, 'ngSToso', 'asc');
+      sortMDArrayByColumn(this.data, 'ngSToso', 'asc');
     } else {
       const colType = this.tableSettings.columns.find(col => col.name === colName).type;
       if (colType === 'checkbox') {
-        sortMDArrayByColumn(this.tableData, colName, newSort, 'checked');
+        sortMDArrayByColumn(this.data, colName, newSort, 'checked');
       } else {
         // For String/the default
-        sortMDArrayByColumn(this.tableData, colName, newSort);
+        sortMDArrayByColumn(this.data, colName, newSort);
       }
     }
   }
@@ -209,14 +205,14 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     // First capture the filter
     this.filterValues[colName] = filterText;
     let filterRegEx: RegExp;
-    this.tableData.forEach( row => {
+    this.data.forEach( row => {
       row.ngSTdisp = true;
     });
     // On any key in the filterValues, filter the appropriate column for that value
     for (let key in this.filterValues) {
       if (this.filterValues[key] !== '' && this.filterValues[key] !== null) {
         filterRegEx = new RegExp(this.filterValues[key], 'gi');
-        this.tableData.forEach(row => {
+        this.data.forEach(row => {
           let keyType = this.tableSettings.columns.find(cs => cs.name === key).type;
           if (keyType === 'string') {
             if (row[key].match(filterRegEx) === null) { row.ngSTdisp = false; }
@@ -264,7 +260,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   checkboxChange(event, rowNum: number, colName: string) {
     const newValue = event.target.checked;
     // Call exception delete function here
-    this.tableData[rowNum][colName].checked = newValue;
+    this.data[rowNum][colName].checked = newValue;
     const rowArray: number[] = [];
     if (this.tableSettings.emitDataChanges === true) {
       rowArray.push(rowNum);
@@ -278,7 +274,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     if (newValue === '') {
       newValue = undefined;
     }
-    this.tableData[rowNum][colName] = newValue;
+    this.data[rowNum][colName] = newValue;
     if (this.tableSettings.emitDataChanges === true) {
       rowArray.push(rowNum);
       this.emitDataChange(rowArray, colName, 'drp', newValue);
@@ -301,7 +297,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     } else if (type === 'chk') {
       // Checkboxes
       newValue = event.target.checked;
-      this.tableData.forEach((r, rIndex) => {
+      this.data.forEach((r, rIndex) => {
         if (r.ngSTdisp === true) { r[colName].checked = newValue; rowArray.push(rIndex); }
       });
       if (this.tableSettings.emitDataChanges === true) {
@@ -314,7 +310,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
       } else {
         newValue = event.target.value;
       }
-      this.tableData.forEach((r, rIndex) => {
+      this.data.forEach((r, rIndex) => {
         if (r.ngSTdisp === true) { r[colName] = newValue; rowArray.push(rIndex); }
       });
       if (this.tableSettings.emitDataChanges === true) {
@@ -330,7 +326,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
 
     if (type === 'allText') {
       rowArray = []
-;      objectIn.tableData.forEach((r, rIndex) => {
+;      objectIn.data.forEach((r, rIndex) => {
         if (r.ngSTdisp === true) { r[colName] = newValue; rowArray.push(rIndex); }
       });
       if (objectIn.tableSettings.emitDataChanges === true) {
@@ -338,7 +334,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
       }
     } else if (type === 'text') {
       const rowNum = rowArray[0];
-      objectIn.tableData[rowNum][colName] = newValue;
+      objectIn.data[rowNum][colName] = newValue;
       if (objectIn.tableSettings.emitDataChanges === true) {
         objectIn.emitDataChange(rowArray, colName, 'text', newValue);
       }

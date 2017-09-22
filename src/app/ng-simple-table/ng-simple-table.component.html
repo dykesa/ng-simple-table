@@ -28,7 +28,7 @@
                     </ng-container>
                 </tr>
             </ng-container>
-            <ng-container *ngFor="let row of tableData; let i = index; let odd = odd; let even = even;">
+            <ng-container *ngFor="let row of data; let i = index; let odd = odd; let even = even;">
                 <tr *ngIf="row.ngSTRowId !== undefined && row.ngSTdisp === true" id="{{row.ngSTRowId}}" class="ng-st-row" [ngClass]="{ odd: odd, even: even }">
                     <ng-container *ngFor="let col of tableSettings.columns">
                         <td class="ng-st-cell {{col.name}}" [style.max-width.px]="col.maxWidth">
@@ -36,7 +36,7 @@
                                 {{row[col.name]}}
                             </ng-container>
                             <ng-container *ngIf="col.type==='string' && col.edit === true">
-                                <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="textChange($event, i, col.name);">{{tableData[i][col.name]}}</textarea>
+                                <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="textChange($event, i, col.name);">{{data[i][col.name]}}</textarea>
                             </ng-container>
                             <ng-container *ngIf="col.type==='html'">
                                 <div [innerHTML]="row[col.name]"></div>
@@ -61,7 +61,7 @@
                                 {{row[col.name]}}
                             </ng-container>
                             <ng-container *ngIf="col.type==='string' && col.edit === true">
-                                <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="textChange($event, i, col.name);">{{tableData[i][col.name]}}</textarea>
+                                <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="textChange($event, i, col.name);">{{data[i][col.name]}}</textarea>
                             </ng-container>
                             <ng-container *ngIf="col.type==='html'">
                                 <div [innerHTML]="row[col.name]"></div>
