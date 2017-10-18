@@ -19,6 +19,9 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   filterValues: string[];
   timeoutHandles: any[];
 
+  // Variable to bind the model too for the all textarea
+  allTextArea: string;
+
   constructor() {
     this.tableSettings = new TableSettings();
     this.filterValues = [];
@@ -194,10 +197,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   }
 
   filterTypeCapture(event, colName: string) {
-    // Don't worry about shift keys
-    if (event.keyCode === 16) { return; }
-    // Grab the element so late it can be cleared
-    const filterText = event.target.value;
+    const filterText = event;
     this.filterChange(filterText, colName);
   }
 
@@ -246,10 +246,8 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   }
 
   textChange(event, rowNum: number, colName: string) {
-    // Don't worry about shift keys
-    if (event.keyCode === 16) { return; }
-    // Grab the element so late it can be cleared
-    const newValue = event.target.value;
+    const newValue = event;
+
     const rowArray: number[] = [];
     if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
     rowArray.push(rowNum);
@@ -290,7 +288,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
 
       // Actual rows aren't calculated until the delay is up so just passing in an array with a number 0
       rowArray.push(0);
-      newValue = event.target.value;
+      newValue = event;
       if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
       this.timeoutHandles[colName] =
         setTimeout(this.changeDelay.bind(null, this, rowArray, colName, 'allText', newValue), this.tableSettings.changeTextDelay);

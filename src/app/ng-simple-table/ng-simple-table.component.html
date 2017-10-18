@@ -19,7 +19,7 @@
                     <ng-container *ngFor="let col of tableSettings.columns">
                         <td [style.max-width.px]="col.maxWidth">
                             <div class="filter-container">
-                                <input type="text" class="filter-textbox" [style.max-width.px]="(col.maxWidth-6)" placeholder="Filter..." [value]="filterValues[col.name]" (keyup)="filterTypeCapture($event, col.name);" />
+                                <input type="text" class="filter-textbox" [style.max-width.px]="(col.maxWidth-6)" placeholder="Filter..." [ngModel]="filterValues[col.name]" (ngModelChange)="filterTypeCapture($event, col.name);" />
                                 <div class="ng-st-clear-filter-container">
                                     <i class="icon-cancel ng-st-clear-filter" (click)="clearFilter(col.name);"></i>
                                 </div>
@@ -36,7 +36,7 @@
                                 {{row[col.name]}}
                             </ng-container>
                             <ng-container *ngIf="col.type==='string' && col.edit === true">
-                                <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="textChange($event, i, col.name);">{{data[i][col.name]}}</textarea>
+                                <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" [ngModel]="data[i][col.name]" (ngModelChange)="textChange($event, i, col.name);"></textarea>
                             </ng-container>
                             <ng-container *ngIf="col.type==='html'">
                                 <div [innerHTML]="row[col.name]"></div>
@@ -61,7 +61,7 @@
                                 {{row[col.name]}}
                             </ng-container>
                             <ng-container *ngIf="col.type==='string' && col.edit === true">
-                                <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="textChange($event, i, col.name);">{{data[i][col.name]}}</textarea>
+                                <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" [ngModel]="data[i][col.name]" (ngModelChange)="textChange($event, i, col.name);"></textarea>
                             </ng-container>
                             <ng-container *ngIf="col.type==='html'">
                                 <div [innerHTML]="row[col.name]"></div>
@@ -83,7 +83,7 @@
                 <ng-container *ngFor="let col of tableSettings.columns">
                     <td>
                         <ng-container *ngIf="col.type==='string' && col.edit">
-                            <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" (keyup)="allChange($event, col.name, 'allText')"></textarea>
+                            <textarea class="ngst-edit-data" [style.max-width.px]="col.maxWidth*.9" [ngModel]="allTextArea" (ngModelChange)="allChange($event, col.name, 'allText')"></textarea>
                         </ng-container>
                         <ng-container *ngIf="col.type==='checkbox' && col.edit">
                             <input type="checkbox" (change)="allChange($event, col.name, 'chk')" [checked]="startAllChkStatus(col.name)" />&nbsp;All
