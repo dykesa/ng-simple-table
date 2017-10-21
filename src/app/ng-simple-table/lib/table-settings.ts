@@ -4,6 +4,7 @@ export class TableSettings {
   filterRow: any;
   bottomEditAllRow: any;
   changeTextDelay: number;
+  changeAllTextDelay: number;
   emitDataChanges: any;
   columns: ColumnSettings[];
 
@@ -15,6 +16,7 @@ export class TableSettings {
     this.filterRow = true;
     this.bottomEditAllRow = false;
     this.changeTextDelay = 0;
+    this.changeAllTextDelay = 0;
     this.emitDataChanges = false;
   }
 }

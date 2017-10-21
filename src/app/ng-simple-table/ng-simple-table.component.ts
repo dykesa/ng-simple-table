@@ -17,7 +17,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   tdLoaded = false;
   renderReady = false;
   filterValues: string[];
-  timeoutHandles: any[];
+  timeoutHandles: any[][];
 
   // Variable to bind the model too for the all textarea
   allTextArea: string;
@@ -43,7 +43,15 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   }
 
   checkRenderReady() {
-    if (this.tsLoaded === true && this.tdLoaded === true) {this.renderReady = true; }
+    if (this.tsLoaded === true && this.tdLoaded === true) {
+      // Setup timout handlers array
+      this.tableSettings.columns.forEach(c => {
+        if (c.type === 'string' || c.type === undefined || (c.type !== 'checkbox' && c.type !== 'dropdown' && c.type !== 'html')) {
+          this.timeoutHandles[c.name] = [];
+        }
+      });
+      this.renderReady = true;
+    }
   }
 
   loadTableSettings() {
@@ -59,6 +67,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
       this.tableSettings.bottomEditAllRow = this.settings.bottomEditAllRow;
     }
     if (this.settings.changeTextDelay !== undefined) { this.tableSettings.changeTextDelay = this.settings.changeTextDelay; }
+    if (this.settings.changeAllTextDelay !== undefined) { this.tableSettings.changeAllTextDelay = this.settings.changeAllTextDelay; }
     if (this.settings.emitDataChanges !== undefined) { this.tableSettings.emitDataChanges = this.settings.emitDataChanges; }
     let colCount = 0;
     this.settings.columns.forEach(col => {
@@ -249,9 +258,9 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     const newValue = event;
 
     const rowArray: number[] = [];
-    if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
+    if (this.timeoutHandles[colName][rowNum] !== undefined) { clearTimeout(this.timeoutHandles[colName][rowNum]); }
     rowArray.push(rowNum);
-    this.timeoutHandles[colName] =
+    this.timeoutHandles[colName][rowNum] =
       setTimeout(this.changeDelay.bind(null, this, rowArray, colName, 'text', newValue), this.tableSettings.changeTextDelay);
   }
 
@@ -289,9 +298,9 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
       // Actual rows aren't calculated until the delay is up so just passing in an array with a number 0
       rowArray.push(0);
       newValue = event;
-      if (this.timeoutHandles[colName] !== undefined) { clearTimeout(this.timeoutHandles[colName]); }
-      this.timeoutHandles[colName] =
-        setTimeout(this.changeDelay.bind(null, this, rowArray, colName, 'allText', newValue), this.tableSettings.changeTextDelay);
+      if (this.timeoutHandles[colName]['all'] !== undefined) { clearTimeout(this.timeoutHandles[colName]['all']); }
+      this.timeoutHandles[colName]['all'] =
+        setTimeout(this.changeDelay.bind(null, this, rowArray, colName, 'allText', newValue), this.tableSettings.changeAllTextDelay);
     } else if (type === 'chk') {
       // Checkboxes
       newValue = event.target.checked;
