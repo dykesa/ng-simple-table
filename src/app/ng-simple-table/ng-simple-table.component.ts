@@ -19,7 +19,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   filterValues: string[];
   timeoutHandles: any[][];
 
-  // Variable to bind the model too for the all textarea
+  // Variable to bind the model to for the all textarea
   allTextArea: string;
 
   constructor() {
