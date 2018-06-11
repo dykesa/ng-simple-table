@@ -8,7 +8,7 @@ import { NgSimpleTableComponent, DataChangeRequest } from './ng-simple-table/ng-
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Simple Table Example';
+  title = 'Ng Simple Table Example';
   exampleTableSettings: any;
   exampleTableData: any;
   dataChange: DataChangeRequest;
@@ -20,30 +20,31 @@ export class AppComponent {
       , changeTextDelay: 500
       , changeAllTextDelay: 4000
       , emitDataChanges: true
+      , maxDisplayRows: 3
       , columns: [
         {name: 'col1',
         display: 'Column 1',
         type: 'string',
         edit: true,
-        maxWidth: 100}
+        maxWidth: 150}
         , {name: 'col2',
         display: 'Column 2 Test',
         type: 'string',
         edit: false,
         sortable: false,
-        maxWidth: 100}
+        maxWidth: 175}
         , {name: 'col3',
         display: 'Checkbox Test',
         type: 'checkbox',
         edit: true,
         sortable: true,
-        maxWidth: 100}
+        maxWidth: 200}
         , {name: 'col4',
         display: 'Dropdown Development',
         type: 'dropdown',
         edit: true,
         sortable: true,
-        maxWidth: 100,
+        maxWidth: 200,
         dropdownOptions: {
             default: 'Pick something',
             options: [{

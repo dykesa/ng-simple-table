@@ -91,3 +91,28 @@ input[type="text"].filter-box {
     right: 0px;
     /* z-index: 1; */
 }
+
+.ng-st-paging-container {
+    position: relative;
+}
+
+.ng-st-small-text {
+    font-size: .8em;
+}
+
+.ng-st-paging-info-text {
+    color: red;
+}
+
+.ng-st-paging-control {
+    margin-left: 6em;
+    padding-bottom: 1em;
+}
+
+.ng-st-prev-next {
+    margin-left: 3em;
+}
+
+.ng-st-prev-next a {
+    text-decoration: none;
+}

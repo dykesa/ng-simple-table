@@ -1,11 +1,12 @@
 export class TableSettings {
-  displayHeaders: any;
+  displayHeaders: boolean;
   tableClass: string;
-  filterRow: any;
-  bottomEditAllRow: any;
+  filterRow: boolean;
+  bottomEditAllRow: boolean;
   changeTextDelay: number;
   changeAllTextDelay: number;
-  emitDataChanges: any;
+  emitDataChanges: boolean;
+  maxDisplayRows: number;
   columns: ColumnSettings[];
 
   constructor() {
@@ -18,6 +19,7 @@ export class TableSettings {
     this.changeTextDelay = 0;
     this.changeAllTextDelay = 0;
     this.emitDataChanges = false;
+    this.maxDisplayRows = null;
   }
 }
 
@@ -25,8 +27,8 @@ export class ColumnSettings {
   name: string;
   display: string;
   type: string;
-  edit: any;
-  visible: any;
+  edit: boolean;
+  visible: boolean;
   order: number;
   sortable: any;
   sortSettings: SortInfo;
@@ -35,11 +37,15 @@ export class ColumnSettings {
 }
 
 export class SortInfo {
-  sort: any;
+  sort: string;
 
-  constructor() {
+  constructor(startSort?: string) {
     // Options for this should be "unsort", "asc", "desc"
-    this.sort = 'unsort';
+    if (startSort === undefined || (startSort !== 'unsort' && startSort !== 'asc' && startSort !== 'desc')) {
+      this.sort = 'unsort';
+    } else {
+      this.sort = startSort;
+    }
   }
 }
 

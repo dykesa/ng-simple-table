@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter  } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 
 import { TableSettings, ColumnSettings, SortInfo, Dropdown, DrpdwnOption } from './lib/table-settings';
 
@@ -18,14 +18,18 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   renderReady = false;
   filterValues: string[];
   timeoutHandles: any[][];
+  pageInfo: PageInfo;
 
   // Variable to bind the model to for the all textarea
   allTextArea: string;
 
-  constructor() {
+  constructor(
+    private _changeDetectorRef: ChangeDetectorRef
+  ) {
     this.tableSettings = new TableSettings();
     this.filterValues = [];
     this.timeoutHandles = [];
+    this.pageInfo = new PageInfo();
    }
 
   ngOnInit() {
@@ -50,8 +54,33 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
           this.timeoutHandles[c.name] = [];
         }
       });
+      this.calculatePagingInfo();
       this.renderReady = true;
     }
+  }
+
+  calculatePagingInfo() {
+    if (this.tableSettings.maxDisplayRows !== null) {
+      this.pageInfo.calculatePageInfo(this.data.length, this.tableSettings.maxDisplayRows);
+    } else {
+      this.pageInfo = new PageInfo();
+    }
+  }
+
+  gotoPage(pageNumber: number) {
+    if (pageNumber === undefined || pageNumber === null || pageNumber < 1) {
+      // Undefined, null, 0, or negative -> just go to page 1
+      this.pageInfo.pageOffset = 1;
+    } else {
+      if (pageNumber > this.pageInfo.numberPages) {
+        // Page over the avialable number of pages, set to last page
+        this.pageInfo.pageOffset = this.pageInfo.numberPages;
+      } else {
+        // something valid passed in, set current page offset to passed in page number
+        this.pageInfo.pageOffset = pageNumber;
+      }
+    }
+    this._changeDetectorRef.detectChanges();
   }
 
   loadTableSettings() {
@@ -69,6 +98,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     if (this.settings.changeTextDelay !== undefined) { this.tableSettings.changeTextDelay = this.settings.changeTextDelay; }
     if (this.settings.changeAllTextDelay !== undefined) { this.tableSettings.changeAllTextDelay = this.settings.changeAllTextDelay; }
     if (this.settings.emitDataChanges !== undefined) { this.tableSettings.emitDataChanges = this.settings.emitDataChanges; }
+    if (this.settings.maxDisplayRows !== undefined) { this.tableSettings.maxDisplayRows = this.settings.maxDisplayRows; }
     let colCount = 0;
     this.settings.columns.forEach(col => {
       // column must have a name
@@ -149,6 +179,8 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         rowIn.ngSToso = i;
         // Should a row be displayed
         rowIn.ngSTdisp = true;
+        // Marking rows to be compared
+        rowIn.ngSTcomp = false;
       });
       this.tdLoaded = true;
     }
@@ -417,4 +449,44 @@ export class DataChangeRequest {
     this.Type = type;
     this.NewValue = newValue;
   }
+}
+
+class PageInfo {
+    // Data paging info
+    totalRows: number;
+    rowsPerPage: number;
+    pageOffset: number;
+    numberPages: number;
+
+    constructor() {
+      this.totalRows = 0;
+      this.rowsPerPage = null;
+      this.pageOffset = null;
+      this.numberPages = null;
+    }
+
+    calculatePageInfo(totalRows?: number, rowsPerPage?: number) {
+      if (totalRows !== undefined) {
+        this.totalRows = totalRows;
+      } else {
+        totalRows = this.totalRows;
+      }
+      if (rowsPerPage !== undefined) {
+        this.rowsPerPage = rowsPerPage;
+      } else {
+        rowsPerPage = this.rowsPerPage;
+      }
+
+      if (totalRows !== undefined && rowsPerPage !== undefined && rowsPerPage !== null) {
+        this.pageOffset = 1;
+        this.numberPages = Math.floor(this.totalRows / rowsPerPage);
+        if (this.totalRows % rowsPerPage !== 0) {
+          this.numberPages += 1;
+        }
+      } else {
+        this.rowsPerPage = null;
+        this.pageOffset = null;
+        this.numberPages = null;
+      }
+    }
 }
