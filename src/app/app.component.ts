@@ -20,7 +20,7 @@ export class AppComponent {
       , changeTextDelay: 500
       , changeAllTextDelay: 4000
       , emitDataChanges: true
-      , maxDisplayRows: 3
+      , maxDisplayRows: 4
       , columns: [
         {name: 'col1',
         display: 'Column 1',

@@ -83,6 +83,20 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     this._changeDetectorRef.detectChanges();
   }
 
+  // dispRowFilter(): Array<any> {
+  //   let returnArr = [];
+
+  //   // Return an array of all displayed rows
+  //   returnArr = this.data.filter(dr => dr.ngSTdisp === true);
+  //   if (returnArr === undefined) {
+  //     // If no values are displayed, just return the data array
+  //     returnArr = [];
+  //   }
+  //   console.log(returnArr);
+
+  //   return returnArr;
+  // }
+
   loadTableSettings() {
     // Set defaults for some table settings if they weren't set by the user
     if (this.settings.displayHeaders !== undefined && (this.settings.displayHeaders === false || this.settings.displayHeaders === true)) {
@@ -271,6 +285,9 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         });
       }
     }
+    // console.log(this.data.filter(dr => dr.ngSTdisp === true));
+    this.pageInfo.calculatePageInfo(this.data.filter(dr => dr.ngSTdisp === true).length);
+    sortMDArrayByColumn(this.data, 'ngSTdisp', 'desc');
   }
 
   dropdownOptionAssociation(dropdownColName: string) {

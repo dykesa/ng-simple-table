@@ -113,6 +113,23 @@ input[type="text"].filter-box {
     margin-left: 3em;
 }
 
+.ng-st-prev-next-no-margin {
+    margin-left: 0px;
+}
+
+.ng-st-prev-next-no-margin a {
+    text-decoration: none;
+}
+
 .ng-st-prev-next a {
     text-decoration: none;
+}
+
+table.ng-st-control,
+.ng-st-control tr,
+.ng-st-control td {
+    border-width: 0px;
+    border: none;
+    padding: 0px;
+    margin: 0px;
 }

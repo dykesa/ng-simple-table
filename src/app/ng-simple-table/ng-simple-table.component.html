@@ -1,12 +1,28 @@
 <div *ngIf="renderReady === true" class="ng-simple-table-holder">
     <div *ngIf="tableSettings.maxDisplayRows !== null && pageInfo.numberPages > 1" class="ng-st-paging-container">
-        <div class="ng-st-paging-control"><span class="ng-st-small-text">Paging @ {{ tableSettings.maxDisplayRows }} results per page</span>
-            <br /><span class="ng-st-paging-info-text">Currently on page </span><b>{{ pageInfo.pageOffset }}</b><span class="ng-st-paging-info-text"> of </span><i>{{ pageInfo.numberPages }}</i>
-            <span class="ng-st-prev-next">
-            <span *ngIf="pageInfo.pageOffset > 1"><a href="javascript:void(0)" (click)="gotoPage(pageInfo.pageOffset - 1)">&larr;&nbsp;Previous</a></span>
-            <span *ngIf="pageInfo.pageOffset !== 1 && pageInfo.pageOffset < pageInfo.numberPages">&nbsp;|&nbsp;</span>
-            <span *ngIf="pageInfo.pageOffset < pageInfo.numberPages"><a href="javascript:void(0)" (click)="gotoPage(pageInfo.pageOffset + 1)">Next&nbsp;&rarr;</a></span>
-            </span>
+        <div class="ng-st-paging-control">
+            <table class="ng-st-control">
+                <tr>
+                    <td>
+                        <span class="ng-st-small-text">Paging @ {{ tableSettings.maxDisplayRows }} results per page</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <br /><span class="ng-st-paging-info-text">Currently on page </span><b>{{ pageInfo.pageOffset }}</b><span class="ng-st-paging-info-text"> of </span><i>{{ pageInfo.numberPages }}</i></td>
+                    <td>
+                        <span class="ng-st-prev-next" *ngIf="pageInfo.pageOffset > 1"><a href="javascript:void(0)" (click)="gotoPage(pageInfo.pageOffset - 1)">&larr;&nbsp;Previous</a></span>
+                        <span class="ng-st-prev-next" *ngIf="pageInfo.pageOffset !== 1 && pageInfo.pageOffset < pageInfo.numberPages">&nbsp;|&nbsp;</span>
+                        <span class="ng-st-prev-next" *ngIf="pageInfo.pageOffset < pageInfo.numberPages"><a href="javascript:void(0)" (click)="gotoPage(pageInfo.pageOffset + 1)">Next&nbsp;&rarr;</a></span>
+                    </td>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <span class="ng-st-prev-next"><a href="javascript:void(0)" (click)="gotoPage(1)">First Page&nbsp;&nbsp;</a></span>
+                            <span class="ng-st-prev-next-no-margin" *ngIf="pageInfo.numberPages > 1"><a href="javascript:void(0)" (click)="gotoPage(pageInfo.numberPages)">-&nbsp;&nbsp;Last Page</a></span>
+                        </td>
+                    </tr>
+            </table>
         </div>
     </div>
     <table [ngClass]="tableSettings.tableClass">
@@ -112,13 +128,29 @@
         </tbody>
     </table>
     <div *ngIf="tableSettings.maxDisplayRows !== null && pageInfo.numberPages > 1" class="ng-st-paging-container">
-        <div class="ng-st-paging-control"><span class="ng-st-small-text">Paging @ {{ tableSettings.maxDisplayRows }} results per page</span>
-            <br /><span class="ng-st-paging-info-text">Currently on page </span><b>{{ pageInfo.pageOffset }}</b><span class="ng-st-paging-info-text"> of </span><i>{{ pageInfo.numberPages }}</i>
-            <span class="ng-st-prev-next">
-            <span *ngIf="pageInfo.pageOffset > 1"><a href="javascript:void(0)" (click)="gotoPage(pageInfo.pageOffset - 1)">&larr;&nbsp;Previous</a></span>
-            <span *ngIf="pageInfo.pageOffset !== 1 && pageInfo.pageOffset < pageInfo.numberPages">&nbsp;|&nbsp;</span>
-            <span *ngIf="pageInfo.pageOffset < pageInfo.numberPages"><a href="javascript:void(0)" (click)="gotoPage(pageInfo.pageOffset + 1)">Next&nbsp;&rarr;</a></span>
-            </span>
+        <div class="ng-st-paging-control">
+            <table class="ng-st-control">
+                <tr>
+                    <td>
+                        <span class="ng-st-small-text">Paging @ {{ tableSettings.maxDisplayRows }} results per page</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <br /><span class="ng-st-paging-info-text">Currently on page </span><b>{{ pageInfo.pageOffset }}</b><span class="ng-st-paging-info-text"> of </span><i>{{ pageInfo.numberPages }}</i></td>
+                    <td>
+                        <span class="ng-st-prev-next" *ngIf="pageInfo.pageOffset > 1"><a href="javascript:void(0)" (click)="gotoPage(pageInfo.pageOffset - 1)">&larr;&nbsp;Previous</a></span>
+                        <span class="ng-st-prev-next" *ngIf="pageInfo.pageOffset !== 1 && pageInfo.pageOffset < pageInfo.numberPages">&nbsp;|&nbsp;</span>
+                        <span class="ng-st-prev-next" *ngIf="pageInfo.pageOffset < pageInfo.numberPages"><a href="javascript:void(0)" (click)="gotoPage(pageInfo.pageOffset + 1)">Next&nbsp;&rarr;</a></span>
+                    </td>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <span class="ng-st-prev-next"><a href="javascript:void(0)" (click)="gotoPage(1)">First Page&nbsp;&nbsp;</a></span>
+                            <span class="ng-st-prev-next-no-margin" *ngIf="pageInfo.numberPages > 1"><a href="javascript:void(0)" (click)="gotoPage(pageInfo.numberPages)">-&nbsp;&nbsp;Last Page</a></span>
+                        </td>
+                    </tr>
+            </table>
         </div>
     </div>
 </div>
