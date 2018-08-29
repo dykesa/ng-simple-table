@@ -18,10 +18,8 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
   renderReady = false;
   filterValues: string[];
   timeoutHandles: any[][];
+  allElements: any[];             // ngModels for "all" row
   pageInfo: PageInfo;
-
-  // Variable to bind the model to for the all textarea
-  allTextArea: string;
 
   constructor(
     private _changeDetectorRef: ChangeDetectorRef
@@ -29,6 +27,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     this.tableSettings = new TableSettings();
     this.filterValues = [];
     this.timeoutHandles = [];
+    this.allElements = [];
     this.pageInfo = new PageInfo();
    }
 
@@ -175,6 +174,16 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         }
         tempCol.sortSettings = new SortInfo();
         tempCol.order = colCount;
+        // If bottom edit all row is enabled and column can be edited, setup array for ngModel binding so a reset can happen
+        if (this.tableSettings.bottomEditAllRow === true && tempCol.edit === true) {
+          switch (tempCol.type) {
+            case 'checkbox':
+              this.allElements[tempCol.name] = false;
+              break;
+            default:
+              this.allElements[tempCol.name] = '';
+          }
+        }
         this.tableSettings.columns.push(tempCol);
       }
     });
@@ -301,6 +310,7 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
 
   clearFilter(colName) {
     this.filterChange(null, colName);
+    this.allClear();
   }
 
   textChange(event, rowNum: number, colName: string) {
@@ -401,6 +411,19 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     // Create a data change request object and emit and event
     const dataChange: DataChangeRequest = new DataChangeRequest(rowArray, colName, type, newValue);
     this.dataChange.emit(dataChange);
+  }
+
+  allClear() {
+    // This function clears any strings or checkboxes in the "all" row
+    this.tableSettings.columns.forEach(col => {
+      if (this.tableSettings.bottomEditAllRow === true && col.edit === true) {
+        if (col.type === 'string') {
+          this.allElements[col.name] = '';
+        } else if (col.type === 'checkbox') {
+          this.allElements[col.name] = false;
+        }
+      }
+    });
   }
 
 }
