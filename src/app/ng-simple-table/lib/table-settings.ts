@@ -32,6 +32,7 @@ export class ColumnSettings {
   order: number;
   sortable: any;
   sortSettings: SortInfo;
+  style: string;
   dropdownOptions?: Dropdown;
   maxWidth: number;
 }

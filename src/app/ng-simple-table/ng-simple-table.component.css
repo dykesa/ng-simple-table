@@ -133,3 +133,10 @@ table.ng-st-control,
     padding: 0px;
     margin: 0px;
 }
+
+.rnd-btn {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    cursor: pointer;
+}

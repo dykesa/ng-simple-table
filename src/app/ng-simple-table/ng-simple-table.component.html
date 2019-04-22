@@ -77,6 +77,9 @@
                                   <option *ngFor='let option of col.dropdownOptions.options' [disabled]="!col.edit" [value]="option.value" [selected]="option.value === row[col.name]">{{option.display}}</option>
                                 </select>
                             </ng-container>
+                            <ng-container *ngIf="col.type==='button' && row[col.name]!==undefined && row[col.name]!==null">
+                                <button [ngClass]="col.style" (click)="buttonClick($event, i, col.name)" type="button">{{row[col.name]}}</button>
+                            </ng-container>
                         </td>
                     </ng-container>
                 </tr>
@@ -101,6 +104,9 @@
                                   <option value="" [disabled]="!col.edit" [selected]="row[col.name] === undefined">{{col.dropdownOptions.default}}</option>
                                   <option *ngFor='let option of col.dropdownOptions.options' [disabled]="!col.edit" [value]="option.value" [selected]="option.value === row[col.name]">{{option.display}}</option>
                                 </select>
+                            </ng-container>
+                            <ng-container *ngIf="col.type==='button' && row[col.name]!==undefined && row[col.name]!==null">
+                                <button [ngClass]="col.style" (click)="buttonClick($event, i, col.name)" type="button">{{row[col.name]}}</button>
                             </ng-container>
                         </td>
                     </ng-container>

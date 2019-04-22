@@ -121,13 +121,13 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
         colCount++;
         let tempCol = new ColumnSettings();
         tempCol.name = col.name;
-        if (col.display === undefined) {
-          tempCol.display = '';
-        } else {
+        if (col.display !== undefined) {
           tempCol.display = col.display;
+        } else {
+          tempCol.display = '';
         }
-        // Options are "string" (default), "checkbox", or "dropdown"
-        if (col.type === undefined && col.type !== 'checkbox' && col.type !== 'dropdown' && col.type !== 'html') {
+        // Options are "string" (default), "checkbox", "dropdown", or "button"
+        if (col.type === undefined && col.type !== 'checkbox' && col.type !== 'dropdown' && col.type !== 'html' && col.type !== 'button') {
           tempCol.type = 'string';
         } else {
           tempCol.type = col.type;
@@ -167,6 +167,11 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
           } else {
             tempCol.maxWidth = col.maxWidth;
           }
+        }
+        if (col.style === undefined) {
+          tempCol.style = '';
+        } else {
+          tempCol.style = col.style;
         }
         // If filtering enabled, setup blank array
         if (this.tableSettings.filterRow === true) {
@@ -344,6 +349,18 @@ export class NgSimpleTableComponent implements OnInit, OnChanges {
     if (this.tableSettings.emitDataChanges === true) {
       rowArray.push(rowNum);
       this.emitDataChange(rowArray, colName, 'drp', newValue);
+    }
+  }
+
+  buttonClick(event, rowNum, colName) {
+    const rowArray: number[] = [];
+    console.log(rowNum);
+    console.log(colName);
+    console.log('');
+    console.log(event);
+    if (this.tableSettings.emitDataChanges === true) {
+      rowArray.push(rowNum);
+      this.emitDataChange(rowArray, colName, 'but', null);
     }
   }
 

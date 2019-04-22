@@ -61,6 +61,13 @@ export class AppComponent {
         edit: false,
         sortable: true,
         maxWidth: 150}
+        , {name: 'buttonTest',
+        display: 'Buttons',
+        type: 'button',
+        edit: false,
+        sortable: false,
+        maxWidth: 150,
+        style: 'rnd-btn'}
       ]
     };
 
@@ -74,6 +81,7 @@ export class AppComponent {
         }
         , col4: 'secret-magic'
         , htmlTest: '<strong>Test</strong>'
+        , buttonTest: 'Click Me!'
       },
       {
         ngSTRowId: '1234'
@@ -85,6 +93,7 @@ export class AppComponent {
         }
         , col4: 'opt2'
         , htmlTest: '<strong>Test</strong>'
+        , buttonTest: 'Click Me!'
       },
       {
         col1: '3rd Row'
@@ -94,6 +103,7 @@ export class AppComponent {
           , display: 'This should be unchecked'
         }
         , htmlTest: '<strong>Test</strong>'
+        , buttonTest: 'Click Me!'
       },
       {
         col1: 'Testing 4th Row'
@@ -103,6 +113,7 @@ export class AppComponent {
           , display: 'This should be unchecked'
         }
         , htmlTest: '<strong>Test</strong>'
+        , buttonTest: 'Click Me!'
       },
       {
         col1: 'Row 5'
@@ -119,6 +130,7 @@ export class AppComponent {
           checked: false
           , display: 'This should be unchecked'
         }
+        , buttonTest: 'Click Me!'
       },
       {
         col1: 'Row 7'
@@ -128,6 +140,7 @@ export class AppComponent {
           , display: 'This should be unchecked'
         }
         , htmlTest: '<strong>Test</strong>'
+        , buttonTest: 'Click Me!'
       },
       {
         col1: 'Row 8'
@@ -136,6 +149,7 @@ export class AppComponent {
           checked: false
           , display: 'This should be unchecked'
         }
+        , buttonTest: 'Click Me!'
       },
       {
         col1: 'Row 9'
@@ -144,6 +158,7 @@ export class AppComponent {
           checked: false
           , display: 'This should be unchecked'
         }
+        , buttonTest: 'Click Me!'
       },
       {
         col1: 'Row 10'
@@ -152,6 +167,7 @@ export class AppComponent {
           checked: false
           , display: 'This should be unchecked'
         }
+        , buttonTest: 'Click Me!'
       },
       {
         col1: 'Row 11'
@@ -160,6 +176,7 @@ export class AppComponent {
           checked: false
           , display: 'This should be unchecked'
         }
+        , buttonTest: 'Click Me!'
       },
       {
         col1: 'Row 12'
@@ -168,6 +185,7 @@ export class AppComponent {
           checked: false
           , display: 'This should be unchecked'
         }
+        , buttonTest: 'Click Me!'
       },
       {
         col1: 'Row 13'
@@ -176,6 +194,7 @@ export class AppComponent {
           checked: false
           , display: 'This should be unchecked'
         }
+        , buttonTest: 'Click Me!'
       }
     ];
   }
